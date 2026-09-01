@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_top_frame_subtraction_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_top_frame_subtraction" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="2,232.001 ns"></ZoomEndTime>
+      <Cursor1Time time="122.500 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="276"></NameColumnWidth>
+      <ValueColumnWidth column_width="112"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="62" />
+   <wvobject type="divider" fp_name="divider79">
+      <obj_property name="label">TOP LEVEL</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/resetn" type="logic">
+      <obj_property name="ElementShortName">resetn</obj_property>
+      <obj_property name="ObjectShortName">resetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/width_frame" type="array">
+      <obj_property name="ElementShortName">width_frame[31:0]</obj_property>
+      <obj_property name="ObjectShortName">width_frame[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/height_frame" type="array">
+      <obj_property name="ElementShortName">height_frame[31:0]</obj_property>
+      <obj_property name="ObjectShortName">height_frame[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_awaddr" type="array">
+      <obj_property name="ElementShortName">s_axi_awaddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axi_awaddr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_awprot" type="array">
+      <obj_property name="ElementShortName">s_axi_awprot[2:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axi_awprot[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_awready" type="logic">
+      <obj_property name="ElementShortName">s_axi_awready</obj_property>
+      <obj_property name="ObjectShortName">s_axi_awready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_awvalid" type="logic">
+      <obj_property name="ElementShortName">s_axi_awvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axi_awvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_bready" type="logic">
+      <obj_property name="ElementShortName">s_axi_bready</obj_property>
+      <obj_property name="ObjectShortName">s_axi_bready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_bresp" type="array">
+      <obj_property name="ElementShortName">s_axi_bresp[1:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axi_bresp[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_bvalid" type="logic">
+      <obj_property name="ElementShortName">s_axi_bvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axi_bvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_wdata" type="array">
+      <obj_property name="ElementShortName">s_axi_wdata[127:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axi_wdata[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_wlast" type="logic">
+      <obj_property name="ElementShortName">s_axi_wlast</obj_property>
+      <obj_property name="ObjectShortName">s_axi_wlast</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_wready" type="logic">
+      <obj_property name="ElementShortName">s_axi_wready</obj_property>
+      <obj_property name="ObjectShortName">s_axi_wready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_wstrb" type="array">
+      <obj_property name="ElementShortName">s_axi_wstrb[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axi_wstrb[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_wvalid" type="logic">
+      <obj_property name="ElementShortName">s_axi_wvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axi_wvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/m_axis_tdata" type="array">
+      <obj_property name="ElementShortName">m_axis_tdata[127:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tdata[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/m_axis_tkeep" type="array">
+      <obj_property name="ElementShortName">m_axis_tkeep[15:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tkeep[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/m_axis_tlast" type="logic">
+      <obj_property name="ElementShortName">m_axis_tlast</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tlast</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/m_axis_tready" type="logic">
+      <obj_property name="ElementShortName">m_axis_tready</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/m_axis_tvalid" type="logic">
+      <obj_property name="ElementShortName">m_axis_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/SYS_CLK_MHZ" type="other">
+      <obj_property name="ElementShortName">SYS_CLK_MHZ</obj_property>
+      <obj_property name="ObjectShortName">SYS_CLK_MHZ</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/HALF_PERIOD" type="other">
+      <obj_property name="ElementShortName">HALF_PERIOD</obj_property>
+      <obj_property name="ObjectShortName">HALF_PERIOD</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/S_AXI_ADDR_WIDTH" type="array">
+      <obj_property name="ElementShortName">S_AXI_ADDR_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_ADDR_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/S_AXI_DATA_WIDTH" type="array">
+      <obj_property name="ElementShortName">S_AXI_DATA_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_DATA_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/M_AXIS_DATA_WIDTH" type="array">
+      <obj_property name="ElementShortName">M_AXIS_DATA_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">M_AXIS_DATA_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider106">
+      <obj_property name="label">AXIF_TO_BUFFER</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/resetn" type="logic">
+      <obj_property name="ElementShortName">resetn</obj_property>
+      <obj_property name="ObjectShortName">resetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/s_axi_awaddr" type="array">
+      <obj_property name="ElementShortName">s_axi_awaddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axi_awaddr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/s_axi_awprot" type="array">
+      <obj_property name="ElementShortName">s_axi_awprot[2:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axi_awprot[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/s_axi_awvalid" type="logic">
+      <obj_property name="ElementShortName">s_axi_awvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axi_awvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/s_axi_awready" type="logic">
+      <obj_property name="ElementShortName">s_axi_awready</obj_property>
+      <obj_property name="ObjectShortName">s_axi_awready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/s_axi_wdata" type="array">
+      <obj_property name="ElementShortName">s_axi_wdata[127:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axi_wdata[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/s_axi_wstrb" type="array">
+      <obj_property name="ElementShortName">s_axi_wstrb[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axi_wstrb[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/s_axi_wvalid" type="logic">
+      <obj_property name="ElementShortName">s_axi_wvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axi_wvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/s_axi_wready" type="logic">
+      <obj_property name="ElementShortName">s_axi_wready</obj_property>
+      <obj_property name="ObjectShortName">s_axi_wready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/s_axi_wlast" type="logic">
+      <obj_property name="ElementShortName">s_axi_wlast</obj_property>
+      <obj_property name="ObjectShortName">s_axi_wlast</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/s_axi_bresp" type="array">
+      <obj_property name="ElementShortName">s_axi_bresp[1:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axi_bresp[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/s_axi_bvalid" type="logic">
+      <obj_property name="ElementShortName">s_axi_bvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axi_bvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/s_axi_bready" type="logic">
+      <obj_property name="ElementShortName">s_axi_bready</obj_property>
+      <obj_property name="ObjectShortName">s_axi_bready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/buf_wr_en" type="logic">
+      <obj_property name="ElementShortName">buf_wr_en</obj_property>
+      <obj_property name="ObjectShortName">buf_wr_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/buf_wr_data" type="array">
+      <obj_property name="ElementShortName">buf_wr_data[127:0]</obj_property>
+      <obj_property name="ObjectShortName">buf_wr_data[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/buf_wr_addr" type="array">
+      <obj_property name="ElementShortName">buf_wr_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">buf_wr_addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/buf_wr_last" type="logic">
+      <obj_property name="ElementShortName">buf_wr_last</obj_property>
+      <obj_property name="ObjectShortName">buf_wr_last</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/buf_wr_full" type="logic">
+      <obj_property name="ElementShortName">buf_wr_full</obj_property>
+      <obj_property name="ObjectShortName">buf_wr_full</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/buf_wr_en_reg" type="logic">
+      <obj_property name="ElementShortName">buf_wr_en_reg</obj_property>
+      <obj_property name="ObjectShortName">buf_wr_en_reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/buf_wr_data_reg" type="array">
+      <obj_property name="ElementShortName">buf_wr_data_reg[127:0]</obj_property>
+      <obj_property name="ObjectShortName">buf_wr_data_reg[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/buf_wr_addr_reg" type="array">
+      <obj_property name="ElementShortName">buf_wr_addr_reg[31:0]</obj_property>
+      <obj_property name="ObjectShortName">buf_wr_addr_reg[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/buf_wr_last_reg" type="logic">
+      <obj_property name="ElementShortName">buf_wr_last_reg</obj_property>
+      <obj_property name="ObjectShortName">buf_wr_last_reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/state" type="array">
+      <obj_property name="ElementShortName">state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">state[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/next_state" type="array">
+      <obj_property name="ElementShortName">next_state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">next_state[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/current_addr" type="array">
+      <obj_property name="ElementShortName">current_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">current_addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/addr_valid" type="logic">
+      <obj_property name="ElementShortName">addr_valid</obj_property>
+      <obj_property name="ObjectShortName">addr_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/bvalid_reg" type="logic">
+      <obj_property name="ElementShortName">bvalid_reg</obj_property>
+      <obj_property name="ObjectShortName">bvalid_reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/S_AXI_ADDR_WIDTH" type="array">
+      <obj_property name="ElementShortName">S_AXI_ADDR_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_ADDR_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/S_AXI_DATA_WIDTH" type="array">
+      <obj_property name="ElementShortName">S_AXI_DATA_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_DATA_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/IDLE" type="array">
+      <obj_property name="ElementShortName">IDLE[3:0]</obj_property>
+      <obj_property name="ObjectShortName">IDLE[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/ADDR" type="array">
+      <obj_property name="ElementShortName">ADDR[3:0]</obj_property>
+      <obj_property name="ObjectShortName">ADDR[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/DATA" type="array">
+      <obj_property name="ElementShortName">DATA[3:0]</obj_property>
+      <obj_property name="ObjectShortName">DATA[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/top_frame_subtraction_inst/axif2buffer_inst/RESP" type="array">
+      <obj_property name="ElementShortName">RESP[3:0]</obj_property>
+      <obj_property name="ObjectShortName">RESP[3:0]</obj_property>
+   </wvobject>
+</wave_config>
