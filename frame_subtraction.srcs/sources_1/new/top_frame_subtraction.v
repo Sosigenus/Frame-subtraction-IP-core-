@@ -182,11 +182,11 @@ module top_frame_subtraction #(
         .buf_wr_full    (buf_wr_full),
         
         //Output signals to AXI-Stream
-        .rd_en          (rd_en),
+        .rd_en          (1'b1),
         .rd_data_a      (rd_data_a),
         .rd_data_b      (rd_data_b),
         .rd_valid       (rd_valid),
-        .rd_ready       (rd_ready)
+        .rd_ready       (1'b1)
     );
     
     frame_subtraction # (

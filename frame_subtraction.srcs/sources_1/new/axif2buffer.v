@@ -137,7 +137,7 @@ module axif2buffer #
     //Capture address
     always @(posedge clk) begin
         if (!resetn) begin
-            current_addr <= 0;
+            current_addr <= {S_AXI_ADDR_WIDTH{1'b0}};
         end else if (s_axi_awvalid && s_axi_awready) begin
             current_addr <= s_axi_awaddr;
         end
@@ -147,8 +147,8 @@ module axif2buffer #
     always @(posedge clk) begin
         if (!resetn) begin
             buf_wr_en_reg   <= 1'b0;
-            buf_wr_data_reg <= 0;
-            buf_wr_addr_reg <= 32'h0000_0000;
+            buf_wr_data_reg <= {S_AXI_DATA_WIDTH{1'b0}};
+            buf_wr_addr_reg <= {S_AXI_ADDR_WIDTH{1'b0}};
             buf_wr_last_reg <= 1'b0;
         end else if (state == DATA && s_axi_wvalid && s_axi_wready && !buf_wr_full) begin
             //Handshake

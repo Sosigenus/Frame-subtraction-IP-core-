@@ -18,59 +18,224 @@
 //*****************************************************************//
 `timescale 1ns / 1ps
 `default_nettype none
+
 module buffer_videostream #(
     parameter DATA_WIDTH    = 128,
     parameter PIXEL_WIDTH   = 8,
     parameter WIDTH_FRAME   = 1920,
     parameter HEIGHT_FRAME  = 1080
-    )
-    (
-        //System signals
-        input wire clk,
-        input wire resetn,
-        
-        //Input signals to buffer
-        input   wire                    buf_wr_en,      
-        input   wire [DATA_WIDTH-1:0]   buf_wr_data,    
-        input   wire [31:0]             buf_wr_addr,   
-        input   wire                    buf_wr_last,   
-        output  wire                    buf_wr_full,
-        
-        //Output signals to proccessing
-        input  wire                     rd_en,
-        output wire [DATA_WIDTH-1:0]    rd_data_a,
-        output wire [DATA_WIDTH-1:0]    rd_data_b,
-        output wire                     rd_valid,
-        input  wire                     rd_ready
-    );
+)
+(
+    //System signals
+    input wire clk,
+    input wire resetn,
     
-    //Loop variable
-    integer i;
+    //Input signals to buffer
+    input  wire                    buf_wr_en,
+    input  wire [DATA_WIDTH-1:0]   buf_wr_data,
+    input  wire [31:0]             buf_wr_addr,
+    input  wire                    buf_wr_last,
+    output wire                    buf_wr_full,
     
-    //Register for assign
-    reg [DATA_WIDTH-1:0]        rd_data_a_reg;
-    reg [31:0]                  rd_data_b_reg;
-    reg                         rd_valid_reg;
+    //Output signals to processing
+    input  wire                    rd_en,
+    output wire [DATA_WIDTH-1:0]   rd_data_a,
+    output wire [DATA_WIDTH-1:0]   rd_data_b,
+    output wire                    rd_valid,
+    input  wire                    rd_ready
+);
+
+    //Parameters
+    localparam WORDS_PER_LINE = WIDTH_FRAME / (DATA_WIDTH / 8); // 1920/16 = 120
+    localparam PTR_WIDTH = $clog2(WORDS_PER_LINE);             // = 7 (0..127)
+
+    //State FSM
+    reg buf_state;    // 0 = Ping, 1 = Pong
+    reg frame_state;  // 0 = Frame_1, 1 = Frame_2
+    localparam BUF_PING = 1'b0;
+    localparam BUF_PONG = 1'b1;
+
+//BRAM
+(* ram_style = "block" *) reg [DATA_WIDTH-1:0] bufferA_ping [0:15360-1];
+(* ram_style = "block" *) reg [DATA_WIDTH-1:0] bufferA_pong [0:15360-1];
+(* ram_style = "block" *) reg [DATA_WIDTH-1:0] bufferB_ping [0:15360-1];
+(* ram_style = "block" *) reg [DATA_WIDTH-1:0] bufferB_pong [0:15360-1];
+
+    //Pointer write
+    reg [PTR_WIDTH-1:0] ptr_wr_a_ping;
+    reg [PTR_WIDTH-1:0] ptr_wr_b_ping;
+    reg [PTR_WIDTH-1:0] ptr_wr_a_pong;
+    reg [PTR_WIDTH-1:0] ptr_wr_b_pong;
+
+    //Ready buffers
+    reg ready_ping;
+    reg ready_pong;
     
-    reg                         buf_wr_full_reg;
+    reg buf_wr_full_reg;
+    reg [PTR_WIDTH-1:0] ptr_buf_rd;
+
+    //Write enable ping/pong
+    wire we_a_ping;
+    wire we_a_pong;
+    wire we_b_ping;
+    wire we_b_pong;
+
+    //Address for bram
+    wire [PTR_WIDTH-1:0] waddr_a_ping;
+    wire [PTR_WIDTH-1:0] waddr_a_pong;
+    wire [PTR_WIDTH-1:0] waddr_b_ping;
+    wire [PTR_WIDTH-1:0] waddr_b_pong;
+
+    //Write enable assigment
+    assign we_a_ping = buf_wr_en && !buf_wr_full_reg && (buf_state == BUF_PING) && (frame_state == 1'b0);
+    assign we_b_ping = buf_wr_en && !buf_wr_full_reg && (buf_state == BUF_PING) && (frame_state == 1'b1);
+    assign we_a_pong = buf_wr_en && !buf_wr_full_reg && (buf_state == BUF_PONG) && (frame_state == 1'b0);
+    assign we_b_pong = buf_wr_en && !buf_wr_full_reg && (buf_state == BUF_PONG) && (frame_state == 1'b1);
+
+    assign waddr_a_ping = ptr_wr_a_ping;
+    assign waddr_b_ping = ptr_wr_b_ping;
+    assign waddr_a_pong = ptr_wr_a_pong;
+    assign waddr_b_pong = ptr_wr_b_pong;
+
+    //Synth BRAM
+    always @(posedge clk) begin
+        if (we_a_ping)
+            bufferA_ping[waddr_a_ping] <= buf_wr_data;
+        if (we_b_ping)
+            bufferB_ping[waddr_b_ping] <= buf_wr_data;
+        if (we_a_pong)
+            bufferA_pong[waddr_a_pong] <= buf_wr_data;
+        if (we_b_pong)
+            bufferB_pong[waddr_b_pong] <= buf_wr_data;
+    end
+
+    //Control pointers
+    always @(posedge clk) begin
+        if (!resetn) begin
+            ptr_wr_a_ping <= 0;
+            ptr_wr_b_ping <= 0;
+            ptr_wr_a_pong <= 0;
+            ptr_wr_b_pong <= 0;
+            buf_state    <= BUF_PING;
+            frame_state  <= 1'b0;
+            ready_ping   <= 1'b0;
+            ready_pong   <= 1'b0;
+            buf_wr_full_reg <= 1'b0;
+        end else begin
+            if (buf_wr_en && !buf_wr_full_reg) begin
+                case ({buf_state, frame_state})
+                    2'b00: begin // Frame 1, Ping
+                        if (ptr_wr_a_ping == WORDS_PER_LINE - 1) begin
+                            ptr_wr_a_ping <= 0;
+                            frame_state   <= 1'b1;
+                        end else begin
+                            ptr_wr_a_ping <= ptr_wr_a_ping + 1;
+                        end
+                    end
+
+                    2'b10: begin // Frame 1, Pong
+                        if (ptr_wr_a_pong == WORDS_PER_LINE - 1) begin
+                            ptr_wr_a_pong <= 0;
+                            frame_state   <= 1'b1;
+                        end else begin
+                            ptr_wr_a_pong <= ptr_wr_a_pong + 1;
+                        end
+                    end
+
+                    2'b01: begin // Frame 2, Ping
+                        if (ptr_wr_b_ping == WORDS_PER_LINE - 1) begin
+                            ptr_wr_b_ping <= 0;
+                            ready_ping    <= 1'b1;
+                            buf_state     <= BUF_PONG;
+                            frame_state   <= 1'b0;
+                        end else begin
+                            ptr_wr_b_ping <= ptr_wr_b_ping + 1;
+                        end
+                    end
+
+                    2'b11: begin // Frame 2, Pong
+                        if (ptr_wr_b_pong == WORDS_PER_LINE - 1) begin
+                            ptr_wr_b_pong <= 0;
+                            ready_pong    <= 1'b1;
+                            buf_state     <= BUF_PING;
+                            frame_state   <= 1'b0;
+                        end else begin
+                            ptr_wr_b_pong <= ptr_wr_b_pong + 1;
+                        end
+                    end
+                endcase
+            end
+
+            //Full buffers
+            if (ready_ping && ready_pong) begin
+                buf_wr_full_reg <= 1'b1;
+            end else begin
+                buf_wr_full_reg <= 1'b0;
+            end
+        end
+    end
+
+    //Read from BRAM
+    reg [DATA_WIDTH-1:0] rd_a_ping, rd_b_ping;
+    reg [DATA_WIDTH-1:0] rd_a_pong, rd_b_pong;
+
+    always @(posedge clk) begin
+        rd_a_ping <= bufferA_ping[ptr_buf_rd];
+        rd_b_ping <= bufferB_ping[ptr_buf_rd];
+
+        rd_a_pong <= bufferA_pong[ptr_buf_rd];
+        rd_b_pong <= bufferB_pong[ptr_buf_rd];
+    end
+
+    //Logic read
+    reg [DATA_WIDTH-1:0] rd_data_a_reg;
+    reg [DATA_WIDTH-1:0] rd_data_b_reg;
+    reg rd_valid_reg;
     
-    //Buffers
-    (* ram_style = "block" *)
-    reg [PIXEL_WIDTH-1:0] bufferA_ping [0:15360-1];
-    (* ram_style = "block" *)
-    reg [PIXEL_WIDTH-1:0] bufferA_pong [0:15360-1];
-    (* ram_style = "block" *)
-    reg [PIXEL_WIDTH-1:0] bufferB_ping [0:15360-1];
-    (* ram_style = "block" *)
-    reg [PIXEL_WIDTH-1:0] bufferB_pong [0:15360-1];   
-    
-    
-    
-    //Assignments
-    assign rd_data_a    = rd_data_a_reg;
-    assign rd_data_b    = rd_data_b_reg;
-    assign rd_valid     = rd_valid_reg;
-    assign buf_wr_full  = buf_wr_full_reg;
-    
+    always @(posedge clk) begin
+        if (!resetn) begin
+            rd_data_a_reg <= 0;
+            rd_data_b_reg <= 0;
+            rd_valid_reg  <= 1'b0;
+            ptr_buf_rd    <= 0;
+        end else begin
+            if (rd_en && rd_ready) begin
+                if (ready_ping) begin
+                    rd_data_a_reg <= rd_a_ping;
+                    rd_data_b_reg <= rd_b_ping;
+                    rd_valid_reg  <= 1'b1;
+
+                    if (ptr_buf_rd == WORDS_PER_LINE - 1) begin
+                        ptr_buf_rd <= 0;
+                        ready_ping <= 1'b0;
+                    end else begin
+                        ptr_buf_rd <= ptr_buf_rd + 1;
+                    end
+                end else if (ready_pong) begin
+                    rd_data_a_reg <= rd_a_pong;
+                    rd_data_b_reg <= rd_b_pong;
+                    rd_valid_reg  <= 1'b1;
+
+                    if (ptr_buf_rd == WORDS_PER_LINE - 1) begin
+                        ptr_buf_rd <= 0;
+                        ready_pong <= 1'b0;
+                    end else begin
+                        ptr_buf_rd <= ptr_buf_rd + 1;
+                    end
+                end else begin
+                    rd_valid_reg <= 1'b0;
+                end
+            end else begin
+                rd_valid_reg <= 1'b0;
+            end
+        end
+    end
+
+    //Assigments
+    assign rd_data_a   = rd_data_a_reg;
+    assign rd_data_b   = rd_data_b_reg;
+    assign rd_valid    = rd_valid_reg && (ready_ping || ready_pong);
+    assign buf_wr_full = buf_wr_full_reg;
+
 endmodule
 `default_nettype wire

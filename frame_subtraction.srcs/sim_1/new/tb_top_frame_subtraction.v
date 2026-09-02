@@ -201,7 +201,7 @@ module tb_top_frame_subtraction();
 
         s_axi_bready = 0;
 
-        top_frame_subtraction_inst.buf_wr_full = 1'b0;
+        
         
         //Reset
         #100;
@@ -214,11 +214,15 @@ module tb_top_frame_subtraction();
         $display("TEST 1: 8 beat AXI burst");
         $display("========================================");
 
-        axi_write_burst(
-            32'h0000_1000,
-            8
-        );
-
+        axi_write_burst(32'h0000_1000, 128);
+        axi_write_burst(32'h0000_1000, 128);
+        axi_write_burst(32'h0000_1000, 128);
+        axi_write_burst(32'h0000_1000, 128);
+        axi_write_burst(32'h0000_1000, 128);
+        axi_write_burst(32'h0000_1000, 128);
+        axi_write_burst(32'h0000_1000, 128);
+        axi_write_burst(32'h0000_1000, 128);
+        
         //Wait
         repeat (10)
             @(posedge clk);
