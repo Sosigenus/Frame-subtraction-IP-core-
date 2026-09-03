@@ -129,13 +129,13 @@ module buffer_videostream #(
     //Control write/read pointers
     always @(posedge clk) begin
         if (!resetn) begin
-            ptr_wr_a_ping <= 0;
-            ptr_wr_b_ping <= 0;
-            ptr_wr_a_pong <= 0;
-            ptr_wr_b_pong <= 0;
-            buf_state    <= BUF_PING_A;
-            ready_ping   <= 1'b0;
-            ready_pong   <= 1'b0;
+            ptr_wr_a_ping   <= 0;
+            ptr_wr_b_ping   <= 0;
+            ptr_wr_a_pong   <= 0;
+            ptr_wr_b_pong   <= 0;
+            buf_state       <= BUF_PING_A;
+            ready_ping      <= 1'b0;
+            ready_pong      <= 1'b0;
             buf_wr_full_reg <= 1'b0;
             
             rd_data_a_reg <= 0;

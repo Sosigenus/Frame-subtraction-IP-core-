@@ -22,7 +22,6 @@ module frame_subtraction #(
     parameter DATA_WIDTH = 128
     )
     (
-        output reg temp = 1'b0,
         //System signals
         input wire clk,
         input wire resetn,
@@ -41,7 +40,7 @@ module frame_subtraction #(
         input   wire                    m_axis_tready,
         output  wire                    m_axis_tvalid
     );
-    
+
     //Register for assign
     reg [DATA_WIDTH-1:0]    m_axis_tdata_reg;
     reg [DATA_WIDTH/8-1:0]  m_axis_tkeep_reg;
@@ -50,20 +49,78 @@ module frame_subtraction #(
     
     reg                     rd_en_reg;
     reg                     rd_ready_reg;
-    
-    
 
+    //Register capture data
+    reg [DATA_WIDTH-1:0]    a_reg;
+    reg [DATA_WIDTH-1:0]    b_reg;
+    reg                     capture_valig_reg;
+
+    //Register result
+    reg [DATA_WIDTH-1:0]    result_reg;
+    reg                     result_valid;
     
-    
-    
-    
+    always @(posedge clk) begin
+        if (!resetn) begin
+            rd_en_reg       <= 1'b1;
+            rd_ready_reg    <= 1'b1;
+        end
+    end
+
+    //Capture data
+    always @(posedge clk) begin
+        if (!resetn) begin
+            a_reg <= {DATA_WIDTH{1'b0}};
+            b_reg <= {DATA_WIDTH{1'b0}};
+            capture_valig_reg <= 1'b0;
+        end
+        else begin
+            if (rd_valid && rd_ready) begin
+                a_reg <= rd_data_a;
+                b_reg <= rd_data_b;
+                capture_valig_reg <= 1'b1;
+            end
+            else begin
+                capture_valig_reg <= 1'b0;
+            end
+        end
+    end
+
+    //Subtraction
+    wire [DATA_WIDTH-1:0] diff; 
+    genvar i;
+    generate 
+        for(i = 0; i < DATA_WIDTH/8; i = i + 1) begin : pixel_pairs
+            wire [DATA_WIDTH-1:0] a = a_reg[i*8 +: 8];
+            wire [DATA_WIDTH-1:0] b = b_reg[i*8 +: 8];
+
+            assign diff[i*8 +: 8] = (a > b) ? (a - b) : (b - a);
+        end
+    endgenerate
+
+    //Result
+    always @(posedge clk) begin
+        if(!resetn) begin
+            result_reg      <= {DATA_WIDTH{1'b0}};
+            result_valid    <= 1'b0;
+        end
+        else begin
+            if (capture_valig_reg) begin
+                result_reg      <= diff;
+                result_valid    <= 1'b1;
+            end
+            else begin
+                result_valid <= 1'b0;
+            end
+        end
+    end
+
     //Assignments
-    assign m_axis_tdata     = m_axis_tdata_reg;
-    assign m_axis_tkeep     = m_axis_tkeep_reg;
+    assign m_axis_tdata     = result_reg;
+    assign m_axis_tkeep     = {DATA_WIDTH/8{1'b1}};
     assign m_axis_tlast     = m_axis_tlast_reg;
-    assign m_axis_tvalid    = m_axis_tvalid_reg;
+    assign m_axis_tvalid    = result_valid;
     assign rd_en            = rd_en_reg;
     assign rd_ready         = rd_ready_reg;
-    
+
 endmodule
 `default_nettype wire

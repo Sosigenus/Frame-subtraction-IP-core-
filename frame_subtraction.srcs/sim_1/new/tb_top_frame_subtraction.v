@@ -201,8 +201,7 @@ module tb_top_frame_subtraction();
 
         s_axi_bready = 0;
 
-        
-        
+
         //Reset
         #100;
         @(posedge clk);
