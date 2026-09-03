@@ -102,6 +102,11 @@ module buffer_videostream #(
     reg [DATA_WIDTH-1:0] rd_a_ping, rd_b_ping;
     reg [DATA_WIDTH-1:0] rd_a_pong, rd_b_pong;
 
+    //Register output
+    reg [DATA_WIDTH-1:0] rd_data_a_reg;
+    reg [DATA_WIDTH-1:0] rd_data_b_reg;
+    reg rd_valid_reg;
+
     //Synth BRAM
     always @(posedge clk) begin
         if (we_a_ping)
@@ -121,7 +126,7 @@ module buffer_videostream #(
         rd_b_pong <= bufferB_pong[ptr_buf_rd];
     end
 
-    //Control write pointers
+    //Control write/read pointers
     always @(posedge clk) begin
         if (!resetn) begin
             ptr_wr_a_ping <= 0;
@@ -132,7 +137,14 @@ module buffer_videostream #(
             ready_ping   <= 1'b0;
             ready_pong   <= 1'b0;
             buf_wr_full_reg <= 1'b0;
+            
+            rd_data_a_reg <= 0;
+            rd_data_b_reg <= 0;
+            rd_valid_reg  <= 1'b0;
+            ptr_buf_rd    <= 0;
+            
         end else begin
+            //Control write pointers
             if (buf_wr_en && !buf_wr_full_reg) begin
                 case (buf_state)
                     4'b0001: begin // Frame 1, Ping
@@ -175,28 +187,7 @@ module buffer_videostream #(
                 endcase
             end
 
-            //Full buffers
-            if (ready_ping && ready_pong) begin
-                buf_wr_full_reg <= 1'b1;
-            end else begin
-                buf_wr_full_reg <= 1'b0;
-            end
-        end
-    end
-
-    //Register output
-    reg [DATA_WIDTH-1:0] rd_data_a_reg;
-    reg [DATA_WIDTH-1:0] rd_data_b_reg;
-    reg rd_valid_reg;
-    
-    //Control read pointers
-    always @(posedge clk) begin
-        if (!resetn) begin
-            rd_data_a_reg <= 0;
-            rd_data_b_reg <= 0;
-            rd_valid_reg  <= 1'b0;
-            ptr_buf_rd    <= 0;
-        end else begin
+            //Control read pointers
             if (rd_en && rd_ready) begin
                 if (ready_ping) begin
                     rd_data_a_reg   <= rd_a_ping;
@@ -225,6 +216,13 @@ module buffer_videostream #(
                 end
             end else begin
                 rd_valid_reg <= 1'b0;
+            end
+
+            //Full buffers
+            if (ready_ping && ready_pong) begin
+                buf_wr_full_reg <= 1'b1;
+            end else begin
+                buf_wr_full_reg <= 1'b0;
             end
         end
     end
