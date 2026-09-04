@@ -88,10 +88,10 @@ module buffer_videostream #(
     wire [PTR_WIDTH-1:0] waddr_b_pong;
 
     //Write enable assigment
-    assign we_a_ping = buf_wr_en && !buf_wr_full_reg && BUF_PING_A;
-    assign we_b_ping = buf_wr_en && !buf_wr_full_reg && BUF_PING_B;
-    assign we_a_pong = buf_wr_en && !buf_wr_full_reg && BUF_PONG_A;
-    assign we_b_pong = buf_wr_en && !buf_wr_full_reg && BUF_PONG_B;
+    assign we_a_ping = buf_wr_en && !buf_wr_full_reg && (buf_state == BUF_PING_A);
+    assign we_b_ping = buf_wr_en && !buf_wr_full_reg && (buf_state == BUF_PING_B);
+    assign we_a_pong = buf_wr_en && !buf_wr_full_reg && (buf_state == BUF_PONG_A);
+    assign we_b_pong = buf_wr_en && !buf_wr_full_reg && (buf_state == BUF_PONG_B);
 
     assign waddr_a_ping = ptr_wr_a_ping;
     assign waddr_b_ping = ptr_wr_b_ping;
