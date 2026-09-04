@@ -19,8 +19,13 @@
 `timescale 1ns / 1ps
 `default_nettype none
 module top_frame_subtraction #(
+    parameter INTERFACE_TYPE    = "AXI4_FULL", // AXI4_FULL or AXI_STREAM
+
     parameter S_AXI_ADDR_WIDTH  = 32,
     parameter S_AXI_DATA_WIDTH  = 128,
+    
+    parameter WIDTH_FRAME       = 1920,
+    parameter HEIGHT_FRAME      = 1080,
     
     parameter M_AXIS_DATA_WIDTH = 128)
     (
@@ -76,6 +81,14 @@ module top_frame_subtraction #(
     output  wire                            s_axi_wready,
     input   wire [S_AXI_DATA_WIDTH/8-1:0]   s_axi_wstrb,
     input   wire                            s_axi_wvalid,
+
+    //AXI-Stream slave
+    input  wire [S_AXI_DATA_WIDTH-1:0]      s_axis_tdata,
+    input  wire [S_AXI_DATA_WIDTH/8-1:0]    s_axis_tkeep,
+    input  wire                             s_axis_tvalid,
+    output wire                             s_axis_tready,
+    input  wire                             s_axis_tlast,
+    input  wire                             s_axis_tuser,
     
     //AXI-Stream master
     output wire [M_AXIS_DATA_WIDTH-1:0]     m_axis_tdata,
@@ -87,8 +100,6 @@ module top_frame_subtraction #(
     );
     
     //temp
-    localparam WIDTH_FRAME  = 1920;
-    localparam HEIGHT_FRAME = 1080;
     localparam PIXEL_WIDTH  = 8;
     
     //Signals for buffer
@@ -104,65 +115,69 @@ module top_frame_subtraction #(
     wire [S_AXI_DATA_WIDTH-1:0] rd_data_b;
     wire                        rd_valid;
     wire                        rd_ready;
-    
-    
-    
+
     //Instance modules
-    axif2buffer #(
-        .S_AXI_ADDR_WIDTH(S_AXI_ADDR_WIDTH),
-        .S_AXI_DATA_WIDTH(S_AXI_DATA_WIDTH)
-    ) axif2buffer_inst
-    (
-        .clk            (clk),
-        .resetn         (resetn),
-        
-        //.s_axi_araddr   (s_axi_araddr),
-        //.s_axi_arburst  (s_axi_arburst),
-        //.s_axi_arid     (s_axi_arid),
-        //.s_axi_arlen    (s_axi_arlen),
-        //.s_axi_arlock   (s_axi_arlock),
-        //.s_axi_arprot   (s_axi_arprot),
-        //.s_axi_arready  (s_axi_arready),
-        //.s_axi_arsize   (s_axi_arsize),
-        //.s_axi_arvalid  (s_axi_arvalid),
-        
-        .s_axi_awaddr   (s_axi_awaddr),
-        //.s_axi_awburst  (s_axi_awburst),
-        //.s_axi_awcache  (s_axi_awcache),
-        //.s_axi_awid     (s_axi_awid),
-        //.s_axi_awlen    (s_axi_awlen),
-        //.s_axi_awlock   (s_axi_awlock),
-        .s_axi_awprot   (s_axi_awprot),
-        .s_axi_awready  (s_axi_awready),
-        //.s_axi_awsize   (s_axi_awsize),
-        .s_axi_awvalid  (s_axi_awvalid),
-        
-        //.s_axi_bid      (s_axi_bid),
-        .s_axi_bready   (s_axi_bready),
-        .s_axi_bresp    (s_axi_bresp),
-        .s_axi_bvalid   (s_axi_bvalid),
-        
-        //.s_axi_rdata    (s_axi_rdata),
-        //.s_axi_rid      (s_axi_rid),
-        //.s_axi_rlast    (s_axi_rlast),
-        //.s_axi_rready   (s_axi_rready),
-        //.s_axi_rresp    (s_axi_rresp),
-        //.s_axi_rvalid   (s_axi_rvalid),
-        
-        .s_axi_wdata    (s_axi_wdata),
-        .s_axi_wlast    (s_axi_wlast),
-        .s_axi_wready   (s_axi_wready),
-        .s_axi_wstrb    (s_axi_wstrb),
-        .s_axi_wvalid   (s_axi_wvalid),
-        
-        //Input signals to buffer
-        .buf_wr_en      (buf_wr_en),
-        .buf_wr_data    (buf_wr_data),
-        .buf_wr_addr    (buf_wr_addr),
-        .buf_wr_last    (buf_wr_last),
-        .buf_wr_full    (buf_wr_full)
-    );
-    
+    generate
+        //AXI4-Full
+        if (INTERFACE_TYPE == "AXI4_FULL") begin : gen_axif
+            axif2buffer #(
+                .S_AXI_ADDR_WIDTH(S_AXI_ADDR_WIDTH),
+                .S_AXI_DATA_WIDTH(S_AXI_DATA_WIDTH)
+            ) u_axif2buffer (
+                .clk            (clk),
+                .resetn         (resetn),
+
+                .s_axi_awaddr   (s_axi_awaddr),
+                .s_axi_awprot   (s_axi_awprot),
+                .s_axi_awvalid  (s_axi_awvalid),
+                .s_axi_awready  (s_axi_awready),
+
+                .s_axi_wdata    (s_axi_wdata),
+                .s_axi_wstrb    (s_axi_wstrb),
+                .s_axi_wvalid   (s_axi_wvalid),
+                .s_axi_wready   (s_axi_wready),
+                .s_axi_wlast    (s_axi_wlast),
+
+                .s_axi_bresp    (s_axi_bresp),
+                .s_axi_bvalid   (s_axi_bvalid),
+                .s_axi_bready   (s_axi_bready),
+
+                .buf_wr_en      (buf_wr_en),
+                .buf_wr_data    (buf_wr_data),
+                .buf_wr_addr    (buf_wr_addr),
+                .buf_wr_last    (buf_wr_last),
+                .buf_wr_full    (buf_wr_full)
+            );
+        end
+
+        //AXI-Stream
+        else if (INTERFACE_TYPE == "AXI_STREAM") begin : gen_axis
+            axis2buffer #(
+                .DATA_WIDTH     (S_AXI_DATA_WIDTH),
+                .PIXEL_WIDTH    (PIXEL_WIDTH),
+                .WIDTH_FRAME    (WIDTH_FRAME),
+                .HEIGHT_FRAME   (HEIGHT_FRAME)
+            ) u_axis2buffer (
+                .clk            (clk),
+                .resetn         (resetn),
+
+                .s_axis_tdata   (s_axis_tdata),
+                .s_axis_tvalid  (s_axis_tvalid),
+                .s_axis_tready  (s_axis_tready),
+                .s_axis_tlast   (s_axis_tlast),
+                .s_axis_tkeep   (s_axis_tkeep),
+                .s_axis_tuser   (s_axis_tuser),
+
+                .buf_wr_en      (buf_wr_en),
+                .buf_wr_data    (buf_wr_data),
+                .buf_wr_addr    (buf_wr_addr),
+                .buf_wr_last    (buf_wr_last),
+                //.buf_wr_user    (buf_wr_user),
+                .buf_wr_full    (buf_wr_full)
+            );
+        end
+    endgenerate
+
     buffer_videostream # (
         .DATA_WIDTH     (S_AXI_DATA_WIDTH),
         .PIXEL_WIDTH    (PIXEL_WIDTH),
@@ -173,14 +188,14 @@ module top_frame_subtraction #(
         //System signals
         .clk            (clk),
         .resetn         (resetn),
-        
+
         //Input signals to buffer
         .buf_wr_en      (buf_wr_en),
         .buf_wr_data    (buf_wr_data),
         .buf_wr_addr    (buf_wr_addr),
         .buf_wr_last    (buf_wr_last),
         .buf_wr_full    (buf_wr_full),
-        
+
         //Output signals to AXI-Stream
         .rd_en          (rd_en),
         .rd_data_a      (rd_data_a),
@@ -188,32 +203,25 @@ module top_frame_subtraction #(
         .rd_valid       (rd_valid),
         .rd_ready       (rd_ready)
     );
-    
+
     frame_subtraction # (
         .DATA_WIDTH(S_AXI_DATA_WIDTH)
     ) frame_subtraction_inst
     (
         .clk            (clk),
         .resetn         (resetn),
-        
+
         .rd_en          (rd_en),
         .rd_data_a      (rd_data_a),
         .rd_data_b      (rd_data_b),
         .rd_valid       (rd_valid),
         .rd_ready       (rd_ready),
-        
+
         .m_axis_tdata   (m_axis_tdata),
         .m_axis_tkeep   (m_axis_tkeep),
         .m_axis_tlast   (m_axis_tlast),
         .m_axis_tready  (m_axis_tready),
         .m_axis_tvalid  (m_axis_tvalid)
     );
-    
-    
-    
-    
-    
-    
-    
 endmodule
 `default_nettype wire
