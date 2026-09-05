@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_top_frame_subtraction_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_top_frame_subtraction" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
+      <ZoomEndTime time="11.120001 us"></ZoomEndTime>
+      <Cursor1Time time="3.182500 us"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="276"></NameColumnWidth>
+      <ValueColumnWidth column_width="96"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="139" />
+   <wvobject type="divider" fp_name="divider79">
+      <obj_property name="label">TOP LEVEL</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/resetn" type="logic">
+      <obj_property name="ElementShortName">resetn</obj_property>
+      <obj_property name="ObjectShortName">resetn</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider10141">
+      <obj_property name="label">axif</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_awaddr" type="array">
+      <obj_property name="ElementShortName">s_axi_awaddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axi_awaddr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_awprot" type="array">
+      <obj_property name="ElementShortName">s_axi_awprot[2:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axi_awprot[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_awready" type="logic">
+      <obj_property name="ElementShortName">s_axi_awready</obj_property>
+      <obj_property name="ObjectShortName">s_axi_awready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_awvalid" type="logic">
+      <obj_property name="ElementShortName">s_axi_awvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axi_awvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_bready" type="logic">
+      <obj_property name="ElementShortName">s_axi_bready</obj_property>
+      <obj_property name="ObjectShortName">s_axi_bready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_bresp" type="array">
+      <obj_property name="ElementShortName">s_axi_bresp[1:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axi_bresp[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_bvalid" type="logic">
+      <obj_property name="ElementShortName">s_axi_bvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axi_bvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_wdata" type="array">
+      <obj_property name="ElementShortName">s_axi_wdata[127:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axi_wdata[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_wlast" type="logic">
+      <obj_property name="ElementShortName">s_axi_wlast</obj_property>
+      <obj_property name="ObjectShortName">s_axi_wlast</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_wready" type="logic">
+      <obj_property name="ElementShortName">s_axi_wready</obj_property>
+      <obj_property name="ObjectShortName">s_axi_wready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_wstrb" type="array">
+      <obj_property name="ElementShortName">s_axi_wstrb[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axi_wstrb[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axi_wvalid" type="logic">
+      <obj_property name="ElementShortName">s_axi_wvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axi_wvalid</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider10142">
+      <obj_property name="label">axis</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axis_tdata" type="array">
+      <obj_property name="ElementShortName">s_axis_tdata[127:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tdata[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axis_tkeep" type="array">
+      <obj_property name="ElementShortName">s_axis_tkeep[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tkeep[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axis_tvalid" type="logic">
+      <obj_property name="ElementShortName">s_axis_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axis_tready" type="logic">
+      <obj_property name="ElementShortName">s_axis_tready</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axis_tlast" type="logic">
+      <obj_property name="ElementShortName">s_axis_tlast</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tlast</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/s_axis_tuser" type="logic">
+      <obj_property name="ElementShortName">s_axis_tuser</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tuser</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/m_axis_tdata" type="array">
+      <obj_property name="ElementShortName">m_axis_tdata[127:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tdata[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/m_axis_tkeep" type="array">
+      <obj_property name="ElementShortName">m_axis_tkeep[15:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tkeep[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/m_axis_tlast" type="logic">
+      <obj_property name="ElementShortName">m_axis_tlast</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tlast</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/m_axis_tready" type="logic">
+      <obj_property name="ElementShortName">m_axis_tready</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/m_axis_tvalid" type="logic">
+      <obj_property name="ElementShortName">m_axis_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/SYS_CLK_MHZ" type="other">
+      <obj_property name="ElementShortName">SYS_CLK_MHZ</obj_property>
+      <obj_property name="ObjectShortName">SYS_CLK_MHZ</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/HALF_PERIOD" type="other">
+      <obj_property name="ElementShortName">HALF_PERIOD</obj_property>
+      <obj_property name="ObjectShortName">HALF_PERIOD</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/S_AXI_ADDR_WIDTH" type="array">
+      <obj_property name="ElementShortName">S_AXI_ADDR_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_ADDR_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/S_AXI_DATA_WIDTH" type="array">
+      <obj_property name="ElementShortName">S_AXI_DATA_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_DATA_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/M_AXIS_DATA_WIDTH" type="array">
+      <obj_property name="ElementShortName">M_AXIS_DATA_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">M_AXIS_DATA_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider106">
+      <obj_property name="label">AXIF_TO_BUFFER</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider258">
+      <obj_property name="label">BUFFER_VIDEOSTREAM</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/resetn" type="logic">
+      <obj_property name="ElementShortName">resetn</obj_property>
+      <obj_property name="ObjectShortName">resetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/buf_wr_en" type="logic">
+      <obj_property name="ElementShortName">buf_wr_en</obj_property>
+      <obj_property name="ObjectShortName">buf_wr_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/buf_wr_data" type="array">
+      <obj_property name="ElementShortName">buf_wr_data[127:0]</obj_property>
+      <obj_property name="ObjectShortName">buf_wr_data[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/buf_wr_addr" type="array">
+      <obj_property name="ElementShortName">buf_wr_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">buf_wr_addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/buf_wr_last" type="logic">
+      <obj_property name="ElementShortName">buf_wr_last</obj_property>
+      <obj_property name="ObjectShortName">buf_wr_last</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/buf_wr_full" type="logic">
+      <obj_property name="ElementShortName">buf_wr_full</obj_property>
+      <obj_property name="ObjectShortName">buf_wr_full</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/rd_en" type="logic">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/rd_data_a" type="array">
+      <obj_property name="ElementShortName">rd_data_a[127:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_data_a[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/rd_data_b" type="array">
+      <obj_property name="ElementShortName">rd_data_b[127:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_data_b[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/rd_valid" type="logic">
+      <obj_property name="ElementShortName">rd_valid</obj_property>
+      <obj_property name="ObjectShortName">rd_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/rd_ready" type="logic">
+      <obj_property name="ElementShortName">rd_ready</obj_property>
+      <obj_property name="ObjectShortName">rd_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/buf_state" type="array">
+      <obj_property name="ElementShortName">buf_state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">buf_state[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/ptr_wr_a_ping" type="array">
+      <obj_property name="ElementShortName">ptr_wr_a_ping[6:0]</obj_property>
+      <obj_property name="ObjectShortName">ptr_wr_a_ping[6:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/ptr_wr_b_ping" type="array">
+      <obj_property name="ElementShortName">ptr_wr_b_ping[6:0]</obj_property>
+      <obj_property name="ObjectShortName">ptr_wr_b_ping[6:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/ptr_wr_a_pong" type="array">
+      <obj_property name="ElementShortName">ptr_wr_a_pong[6:0]</obj_property>
+      <obj_property name="ObjectShortName">ptr_wr_a_pong[6:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/ptr_wr_b_pong" type="array">
+      <obj_property name="ElementShortName">ptr_wr_b_pong[6:0]</obj_property>
+      <obj_property name="ObjectShortName">ptr_wr_b_pong[6:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/ready_ping" type="logic">
+      <obj_property name="ElementShortName">ready_ping</obj_property>
+      <obj_property name="ObjectShortName">ready_ping</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/ready_pong" type="logic">
+      <obj_property name="ElementShortName">ready_pong</obj_property>
+      <obj_property name="ObjectShortName">ready_pong</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/buf_wr_full_reg" type="logic">
+      <obj_property name="ElementShortName">buf_wr_full_reg</obj_property>
+      <obj_property name="ObjectShortName">buf_wr_full_reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/ptr_buf_rd" type="array">
+      <obj_property name="ElementShortName">ptr_buf_rd[6:0]</obj_property>
+      <obj_property name="ObjectShortName">ptr_buf_rd[6:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/we_a_ping" type="logic">
+      <obj_property name="ElementShortName">we_a_ping</obj_property>
+      <obj_property name="ObjectShortName">we_a_ping</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/we_a_pong" type="logic">
+      <obj_property name="ElementShortName">we_a_pong</obj_property>
+      <obj_property name="ObjectShortName">we_a_pong</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/we_b_ping" type="logic">
+      <obj_property name="ElementShortName">we_b_ping</obj_property>
+      <obj_property name="ObjectShortName">we_b_ping</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/we_b_pong" type="logic">
+      <obj_property name="ElementShortName">we_b_pong</obj_property>
+      <obj_property name="ObjectShortName">we_b_pong</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/waddr_a_ping" type="array">
+      <obj_property name="ElementShortName">waddr_a_ping[6:0]</obj_property>
+      <obj_property name="ObjectShortName">waddr_a_ping[6:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/waddr_a_pong" type="array">
+      <obj_property name="ElementShortName">waddr_a_pong[6:0]</obj_property>
+      <obj_property name="ObjectShortName">waddr_a_pong[6:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/waddr_b_ping" type="array">
+      <obj_property name="ElementShortName">waddr_b_ping[6:0]</obj_property>
+      <obj_property name="ObjectShortName">waddr_b_ping[6:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/waddr_b_pong" type="array">
+      <obj_property name="ElementShortName">waddr_b_pong[6:0]</obj_property>
+      <obj_property name="ObjectShortName">waddr_b_pong[6:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/rd_a_ping" type="array">
+      <obj_property name="ElementShortName">rd_a_ping[127:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_a_ping[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/rd_b_ping" type="array">
+      <obj_property name="ElementShortName">rd_b_ping[127:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_b_ping[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/rd_a_pong" type="array">
+      <obj_property name="ElementShortName">rd_a_pong[127:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_a_pong[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/rd_b_pong" type="array">
+      <obj_property name="ElementShortName">rd_b_pong[127:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_b_pong[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/rd_data_a_reg" type="array">
+      <obj_property name="ElementShortName">rd_data_a_reg[127:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_data_a_reg[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/rd_data_b_reg" type="array">
+      <obj_property name="ElementShortName">rd_data_b_reg[127:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_data_b_reg[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/rd_valid_reg" type="logic">
+      <obj_property name="ElementShortName">rd_valid_reg</obj_property>
+      <obj_property name="ObjectShortName">rd_valid_reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/DATA_WIDTH" type="array">
+      <obj_property name="ElementShortName">DATA_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DATA_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/PIXEL_WIDTH" type="array">
+      <obj_property name="ElementShortName">PIXEL_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PIXEL_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/WIDTH_FRAME" type="array">
+      <obj_property name="ElementShortName">WIDTH_FRAME[31:0]</obj_property>
+      <obj_property name="ObjectShortName">WIDTH_FRAME[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/HEIGHT_FRAME" type="array">
+      <obj_property name="ElementShortName">HEIGHT_FRAME[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HEIGHT_FRAME[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/WORDS_PER_LINE" type="array">
+      <obj_property name="ElementShortName">WORDS_PER_LINE[31:0]</obj_property>
+      <obj_property name="ObjectShortName">WORDS_PER_LINE[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/PTR_WIDTH" type="array">
+      <obj_property name="ElementShortName">PTR_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PTR_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/BUF_PING_A" type="array">
+      <obj_property name="ElementShortName">BUF_PING_A[3:0]</obj_property>
+      <obj_property name="ObjectShortName">BUF_PING_A[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/BUF_PING_B" type="array">
+      <obj_property name="ElementShortName">BUF_PING_B[3:0]</obj_property>
+      <obj_property name="ObjectShortName">BUF_PING_B[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/BUF_PONG_A" type="array">
+      <obj_property name="ElementShortName">BUF_PONG_A[3:0]</obj_property>
+      <obj_property name="ObjectShortName">BUF_PONG_A[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /buffer_videostream_inst/BUF_PONG_B" type="array">
+      <obj_property name="ElementShortName">BUF_PONG_B[3:0]</obj_property>
+      <obj_property name="ObjectShortName">BUF_PONG_B[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider2465">
+      <obj_property name="label">FRAME_SUBTRACTION</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/resetn" type="logic">
+      <obj_property name="ElementShortName">resetn</obj_property>
+      <obj_property name="ObjectShortName">resetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/rd_en" type="logic">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/rd_data_a" type="array">
+      <obj_property name="ElementShortName">rd_data_a[127:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_data_a[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/rd_data_b" type="array">
+      <obj_property name="ElementShortName">rd_data_b[127:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_data_b[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/rd_valid" type="logic">
+      <obj_property name="ElementShortName">rd_valid</obj_property>
+      <obj_property name="ObjectShortName">rd_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/rd_ready" type="logic">
+      <obj_property name="ElementShortName">rd_ready</obj_property>
+      <obj_property name="ObjectShortName">rd_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/m_axis_tdata" type="array">
+      <obj_property name="ElementShortName">m_axis_tdata[127:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tdata[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/m_axis_tkeep" type="array">
+      <obj_property name="ElementShortName">m_axis_tkeep[15:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tkeep[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/m_axis_tlast" type="logic">
+      <obj_property name="ElementShortName">m_axis_tlast</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tlast</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/m_axis_tready" type="logic">
+      <obj_property name="ElementShortName">m_axis_tready</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/m_axis_tvalid" type="logic">
+      <obj_property name="ElementShortName">m_axis_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/m_axis_tdata_reg" type="array">
+      <obj_property name="ElementShortName">m_axis_tdata_reg[127:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tdata_reg[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/m_axis_tkeep_reg" type="array">
+      <obj_property name="ElementShortName">m_axis_tkeep_reg[15:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tkeep_reg[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/m_axis_tlast_reg" type="logic">
+      <obj_property name="ElementShortName">m_axis_tlast_reg</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tlast_reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/m_axis_tvalid_reg" type="logic">
+      <obj_property name="ElementShortName">m_axis_tvalid_reg</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tvalid_reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/rd_en_reg" type="logic">
+      <obj_property name="ElementShortName">rd_en_reg</obj_property>
+      <obj_property name="ObjectShortName">rd_en_reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/rd_ready_reg" type="logic">
+      <obj_property name="ElementShortName">rd_ready_reg</obj_property>
+      <obj_property name="ObjectShortName">rd_ready_reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/a_reg" type="array">
+      <obj_property name="ElementShortName">a_reg[127:0]</obj_property>
+      <obj_property name="ObjectShortName">a_reg[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/b_reg" type="array">
+      <obj_property name="ElementShortName">b_reg[127:0]</obj_property>
+      <obj_property name="ObjectShortName">b_reg[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/capture_valig_reg" type="logic">
+      <obj_property name="ElementShortName">capture_valig_reg</obj_property>
+      <obj_property name="ObjectShortName">capture_valig_reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/result_reg" type="array">
+      <obj_property name="ElementShortName">result_reg[127:0]</obj_property>
+      <obj_property name="ObjectShortName">result_reg[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/result_valid" type="logic">
+      <obj_property name="ElementShortName">result_valid</obj_property>
+      <obj_property name="ObjectShortName">result_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/diff" type="array">
+      <obj_property name="ElementShortName">diff[127:0]</obj_property>
+      <obj_property name="ObjectShortName">diff[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[0].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[0].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[0].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[0].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[0].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[0].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[1].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[1].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[1].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[1].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[1].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[1].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[2].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[2].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[2].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[2].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[2].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[2].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[3].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[3].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[3].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[3].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[3].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[3].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[4].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[4].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[4].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[4].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[4].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[4].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[5].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[5].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[5].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[5].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[5].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[5].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[6].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[6].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[6].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[6].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[6].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[6].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[7].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[7].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[7].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[7].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[7].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[7].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[8].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[8].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[8].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[8].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[8].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[8].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[9].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[9].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[9].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[9].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[9].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[9].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[10].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[10].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[10].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[10].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[10].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[10].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[11].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[11].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[11].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[11].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[11].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[11].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[12].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[12].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[12].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[12].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[12].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[12].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[13].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[13].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[13].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[13].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[13].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[13].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[14].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[14].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[14].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[14].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[14].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[14].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[15].a " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[15].a [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[15].a [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/\pixel_pairs[15].b " type="array">
+      <obj_property name="ElementShortName">\pixel_pairs[15].b [127:0]</obj_property>
+      <obj_property name="ObjectShortName">\pixel_pairs[15].b [127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_frame_subtraction/\gen_axis.top_frame_subtraction_inst /frame_subtraction_inst/DATA_WIDTH" type="array">
+      <obj_property name="ElementShortName">DATA_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DATA_WIDTH[31:0]</obj_property>
+   </wvobject>
+</wave_config>

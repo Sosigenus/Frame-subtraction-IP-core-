@@ -1,8 +1,0 @@
-Time resolution is 1 ps
-========================================
-TEST 1: 8 beat AXI burst
-========================================
-========================================
-TEST FINISHED
-========================================
-$finish called at time : 232500 ps : File "E:/projects_vivado/frame_subtraction/frame_subtraction.srcs/sim_1/new/tb_top_frame_subtraction.v" Line 259
