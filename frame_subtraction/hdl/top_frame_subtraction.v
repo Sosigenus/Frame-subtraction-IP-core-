@@ -19,7 +19,7 @@
 `timescale 1ns / 1ps
 `default_nettype none
 module top_frame_subtraction #(
-    parameter INTERFACE_TYPE    = "AXI4_FULL", // AXI4_FULL or AXI_STREAM
+    parameter INTERFACE_TYPE    = "AXI_STREAM", // AXI4_FULL or AXI_STREAM
 
     parameter S_AXI_ADDR_WIDTH  = 32,
     parameter S_AXI_DATA_WIDTH  = 128,
@@ -91,7 +91,8 @@ module top_frame_subtraction #(
     output wire [M_AXIS_DATA_WIDTH/8-1:0]   m_axis_tkeep,
     output wire                             m_axis_tlast,
     input  wire                             m_axis_tready,
-    output wire                             m_axis_tvalid
+    output wire                             m_axis_tvalid,
+    output wire                             m_axis_tuser
     
     );
     
@@ -106,11 +107,12 @@ module top_frame_subtraction #(
     wire                        buf_wr_full;
     
     //Signals for proccessing
-    wire                        rd_en;
     wire [S_AXI_DATA_WIDTH-1:0] rd_data_a;
     wire [S_AXI_DATA_WIDTH-1:0] rd_data_b;
     wire                        rd_valid;
     wire                        rd_ready;
+    wire                        rd_last;
+    wire                        rd_user;
 
     //Instance modules
     generate
@@ -190,11 +192,12 @@ module top_frame_subtraction #(
         .buf_wr_full    (buf_wr_full),
 
         //Output signals to AXI-Stream
-        .rd_en          (rd_en),
         .rd_data_a      (rd_data_a),
         .rd_data_b      (rd_data_b),
         .rd_valid       (rd_valid),
-        .rd_ready       (rd_ready)
+        .rd_ready       (rd_ready),
+        .rd_last        (rd_last),
+        .rd_user        (rd_user)
     );
 
     frame_subtraction # (
@@ -204,17 +207,19 @@ module top_frame_subtraction #(
         .clk            (clk),
         .resetn         (resetn),
 
-        .rd_en          (rd_en),
         .rd_data_a      (rd_data_a),
         .rd_data_b      (rd_data_b),
         .rd_valid       (rd_valid),
         .rd_ready       (rd_ready),
+        .rd_last        (rd_last),
+        .rd_user        (rd_user),
 
         .m_axis_tdata   (m_axis_tdata),
         .m_axis_tkeep   (m_axis_tkeep),
         .m_axis_tlast   (m_axis_tlast),
         .m_axis_tready  (m_axis_tready),
-        .m_axis_tvalid  (m_axis_tvalid)
+        .m_axis_tvalid  (m_axis_tvalid),
+        .m_axis_tuser   (m_axis_tuser)
     );
 endmodule
 `default_nettype wire

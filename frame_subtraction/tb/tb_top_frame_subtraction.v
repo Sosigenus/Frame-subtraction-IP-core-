@@ -36,16 +36,12 @@ module tb_top_frame_subtraction();
 	parameter      M_AXIS_DATA_WIDTH = 128;
 
 	//INTERFACE_TYPE
-	parameter      INTERFACE_TYPE    = "AXI4_FULL"; // AXI4_FULL or AXI_STREAM
+	parameter      INTERFACE_TYPE    = "AXI_STREAM"; // AXI4_FULL or AXI_STREAM
 	
 	//INPUT, OUTPUT top level
 	//System signals
 	reg clk;
 	reg resetn;
-	//
-	//GPIO parameters
-	reg [31:0] width_frame;
-    reg [31:0] height_frame;
     //
     //AXI4-FULL
     reg [S_AXI_ADDR_WIDTH-1:0]      s_axi_awaddr;
@@ -77,6 +73,7 @@ module tb_top_frame_subtraction();
     wire                            m_axis_tlast;
     reg                             m_axis_tready;
     wire                            m_axis_tvalid;
+    wire                            m_axis_tuser;
 
     //Instance top module
     generate
@@ -93,9 +90,6 @@ module tb_top_frame_subtraction();
         (
             .clk            (clk),
             .resetn         (resetn),
-
-            .width_frame    (width_frame),
-            .height_frame   (height_frame),
 
 
             .s_axi_awaddr   (s_axi_awaddr),
@@ -118,7 +112,8 @@ module tb_top_frame_subtraction();
             .m_axis_tkeep   (m_axis_tkeep),
             .m_axis_tlast   (m_axis_tlast),
             .m_axis_tready  (m_axis_tready),
-            .m_axis_tvalid  (m_axis_tvalid)
+            .m_axis_tvalid  (m_axis_tvalid),
+            .m_axis_tuser   (m_axis_tuser)
 
         );
         end
@@ -144,7 +139,8 @@ module tb_top_frame_subtraction();
                 .m_axis_tkeep   (m_axis_tkeep),
                 .m_axis_tlast   (m_axis_tlast),
                 .m_axis_tready  (m_axis_tready),
-                .m_axis_tvalid  (m_axis_tvalid)
+                .m_axis_tvalid  (m_axis_tvalid),
+                .m_axis_tuser   (m_axis_tuser)
             );
         end
     endgenerate
@@ -289,12 +285,13 @@ module tb_top_frame_subtraction();
     endtask
     
     //
+    integer i;
     always #HALF_PERIOD clk <= ~clk;
     initial begin
         clk = 1'b0;
         resetn = 1'b0;
 
-        //AXI4_FULL
+        //AXI4_FULL slave
         s_axi_awaddr  = 0;
         s_axi_awprot  = 0;
         s_axi_awvalid = 0;
@@ -306,12 +303,15 @@ module tb_top_frame_subtraction();
         //
         s_axi_bready = 0;
 
-        //AXI_STREAM
+        //AXI_STREAM slave
         s_axis_tdata  = 0;
         s_axis_tkeep  = 0;
         s_axis_tvalid = 0;
         s_axis_tlast  = 0;
         s_axis_tuser  = 0;
+
+        //AXI_STREAM master
+        m_axis_tready = 1;
 
         //Reset
         #100;
@@ -334,11 +334,9 @@ module tb_top_frame_subtraction();
             axi_write_burst(32'h0000_1000, 120);
             axi_write_burst(32'h0000_1000, 120);
         end else if (INTERFACE_TYPE == "AXI_STREAM") begin
-            axi_stream_write_line(2, 120);
-            axi_stream_write_line(2, 120);
-            axi_stream_write_line(2, 120);
-            axi_stream_write_line(2, 120);
-            axi_stream_write_line(2, 120);
+            for (i = 0; i < HEIGHT_FRAME*3; i = i + 1) begin
+                axi_stream_write_line(2, 120);
+            end
             //TEST_1.
             $display("========================================");
             $display("TEST: AXI_STREAM");
