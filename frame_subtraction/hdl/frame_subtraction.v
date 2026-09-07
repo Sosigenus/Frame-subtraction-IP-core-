@@ -43,6 +43,8 @@ module frame_subtraction #(
         output  wire                    m_axis_tuser
     );
 
+    //Localparameter
+    localparam              PIXEL_WIDTH = 8;
     //Register for assign
     reg                     rd_last_reg;
     reg                     rd_user_reg;
@@ -87,11 +89,11 @@ module frame_subtraction #(
     wire [DATA_WIDTH-1:0] diff; 
     genvar i;
     generate 
-        for(i = 0; i < DATA_WIDTH/8; i = i + 1) begin : pixel_pairs
-            wire [7:0] a = a_reg[i*8 +: 8];
-            wire [7:0] b = b_reg[i*8 +: 8];
+        for(i = 0; i < DATA_WIDTH/PIXEL_WIDTH; i = i + 1) begin : pixel_pairs
+            wire [PIXEL_WIDTH-1:0] a = a_reg[i*PIXEL_WIDTH +: PIXEL_WIDTH];
+            wire [PIXEL_WIDTH-1:0] b = b_reg[i*PIXEL_WIDTH +: PIXEL_WIDTH];
 
-            assign diff[i*8 +: 8] = (a > b) ? (a - b) : (b - a);
+            assign diff[i*8 +: PIXEL_WIDTH] = (a > b) ? (a - b) : (b - a);
         end
     endgenerate
 

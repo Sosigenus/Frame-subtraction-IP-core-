@@ -18,10 +18,8 @@
 //*****************************************************************//
 `timescale 1ns / 1ps
 `default_nettype none
-
 module buffer_videostream #(
     parameter DATA_WIDTH    = 128,
-    parameter PIXEL_WIDTH   = 8,
     parameter WIDTH_FRAME   = 1920,
     parameter HEIGHT_FRAME  = 1080
 )
@@ -29,14 +27,14 @@ module buffer_videostream #(
     //System signals
     input wire clk,
     input wire resetn,
-    
+
     //Input signals to buffer
     input  wire                    buf_wr_en,
     input  wire [DATA_WIDTH-1:0]   buf_wr_data,
     input  wire [31:0]             buf_wr_addr,
     input  wire                    buf_wr_last,
     output wire                    buf_wr_full,
-    
+
     //Output signals to processing
     output wire [DATA_WIDTH-1:0]   rd_data_a,
     output wire [DATA_WIDTH-1:0]   rd_data_b,
@@ -50,6 +48,20 @@ module buffer_videostream #(
     localparam WORDS_PER_LINE = WIDTH_FRAME / (DATA_WIDTH / 8);
     localparam PTR_WIDTH      = $clog2(WORDS_PER_LINE);
     localparam ROWS_WIDTH     = $clog2(HEIGHT_FRAME);
+    
+    initial begin
+        if (WORDS_PER_LINE == 0) begin
+            $error("Must be: WIDTH_FRAME >= DATA_WIDTH/8");
+        end
+
+        if (WIDTH_FRAME % (DATA_WIDTH/8) != 0) begin
+            $error("WIDTH_FRAME must be a multiple of DATA_WIDTH/8");
+        end
+
+        if (HEIGHT_FRAME < 2 || HEIGHT_FRAME > 4320) begin
+            $error("Must be: HEIGHT_FRAME >= 2");
+        end
+    end
 
     //State FSM
     localparam BUF_PING_A = 4'b0001;

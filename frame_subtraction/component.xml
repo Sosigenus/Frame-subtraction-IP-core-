@@ -318,7 +318,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>03cd2ad2</spirit:value>
+            <spirit:value>17a8836e</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -334,7 +334,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>82a19e18</spirit:value>
+            <spirit:value>994ed605</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -349,7 +349,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>72b04ac7</spirit:value>
+            <spirit:value>6be124e7</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -363,7 +363,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>efe91818</spirit:value>
+            <spirit:value>3061ae80</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -863,7 +863,7 @@
       <spirit:file>
         <spirit:name>hdl/top_frame_subtraction.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_aec6f509</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_2caba29d</spirit:userFileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
         <spirit:logicalName>xil_defaultlib</spirit:logicalName>
       </spirit:file>
@@ -922,7 +922,7 @@
       <spirit:file>
         <spirit:name>xgui/frame_subtraction_v1_0.tcl</spirit:name>
         <spirit:fileType>tclSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_efe91818</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_3061ae80</spirit:userFileType>
         <spirit:userFileType>XGUI_VERSION_2</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
@@ -947,12 +947,12 @@
     <spirit:parameter>
       <spirit:name>WIDTH_FRAME</spirit:name>
       <spirit:displayName>Width Frame</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.WIDTH_FRAME">1920</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.WIDTH_FRAME" spirit:minimum="16" spirit:maximum="7680" spirit:rangeType="long">1920</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>HEIGHT_FRAME</spirit:name>
       <spirit:displayName>Height Frame</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.HEIGHT_FRAME">1080</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.HEIGHT_FRAME" spirit:minimum="2" spirit:maximum="4320" spirit:rangeType="long">1080</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>M_AXIS_DATA_WIDTH</spirit:name>
@@ -997,20 +997,20 @@
       </xilinx:taxonomies>
       <xilinx:displayName>frame_subtraction</xilinx:displayName>
       <xilinx:definitionSource>package_project</xilinx:definitionSource>
-      <xilinx:coreRevision>14</xilinx:coreRevision>
+      <xilinx:coreRevision>19</xilinx:coreRevision>
       <xilinx:upgrades>
         <xilinx:canUpgradeFrom>xilinx.com:mdumanski:top_frame_subtraction:1.0</xilinx:canUpgradeFrom>
       </xilinx:upgrades>
-      <xilinx:coreCreationDateTime>2026-09-05T14:10:22Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2026-09-07T16:35:53Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2024.1</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="db91d289"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="4feb2c15"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="ef619b1e"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="d29d0fdb"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="c6f5c39e"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="e62ab58f"/>
-      <xilinx:checksum xilinx:scope="parameters" xilinx:value="c25eb75b"/>
+      <xilinx:checksum xilinx:scope="parameters" xilinx:value="aaf76204"/>
     </xilinx:packagingInfo>
   </spirit:vendorExtensions>
 </spirit:component>

@@ -4,11 +4,20 @@ proc init_gui { IPINST } {
   #Adding Page
   set Page_0 [ipgui::add_page $IPINST -name "Page 0"]
   ipgui::add_param $IPINST -name "INTERFACE_TYPE" -parent ${Page_0} -widget comboBox
-  ipgui::add_param $IPINST -name "S_AXI_ADDR_WIDTH" -parent ${Page_0}
-  ipgui::add_param $IPINST -name "S_AXI_DATA_WIDTH" -parent ${Page_0}
-  ipgui::add_param $IPINST -name "M_AXIS_DATA_WIDTH" -parent ${Page_0}
-  ipgui::add_param $IPINST -name "WIDTH_FRAME" -parent ${Page_0}
-  ipgui::add_param $IPINST -name "HEIGHT_FRAME" -parent ${Page_0}
+  #Adding Group
+  set Width [ipgui::add_group $IPINST -name "Width" -parent ${Page_0}]
+  set_property tooltip {Width} ${Width}
+  ipgui::add_param $IPINST -name "S_AXI_ADDR_WIDTH" -parent ${Width}
+  ipgui::add_param $IPINST -name "M_AXIS_DATA_WIDTH" -parent ${Width}
+  ipgui::add_param $IPINST -name "S_AXI_DATA_WIDTH" -parent ${Width}
+
+  #Adding Group
+  set Setting_frame [ipgui::add_group $IPINST -name "Setting frame" -parent ${Page_0} -display_name {Size frame}]
+  set_property tooltip {Size frame} ${Setting_frame}
+  ipgui::add_static_text $IPINST -name "warning" -parent ${Setting_frame} -text {<b> WIDTH_FRAME </b> must be a multiple of <b> DATA_WIDTH/8 </b>}
+  ipgui::add_param $IPINST -name "WIDTH_FRAME" -parent ${Setting_frame}
+  ipgui::add_param $IPINST -name "HEIGHT_FRAME" -parent ${Setting_frame}
+
 
 
 }

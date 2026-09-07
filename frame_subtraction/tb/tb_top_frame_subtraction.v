@@ -86,44 +86,44 @@ module tb_top_frame_subtraction();
 
                 .WIDTH_FRAME    (WIDTH_FRAME),
                 .HEIGHT_FRAME   (HEIGHT_FRAME)
-        ) top_frame_subtraction_inst
-        (
-            .clk            (clk),
-            .resetn         (resetn),
-
-
-            .s_axi_awaddr   (s_axi_awaddr),
-            .s_axi_awprot   (s_axi_awprot),
-            .s_axi_awready  (s_axi_awready),
-            .s_axi_awvalid  (s_axi_awvalid),
-
-            .s_axi_bready   (s_axi_bready),
-            .s_axi_bresp    (s_axi_bresp),
-            .s_axi_bvalid   (s_axi_bvalid),
-
-            .s_axi_wdata    (s_axi_wdata),
-            .s_axi_wlast    (s_axi_wlast),
-            .s_axi_wready   (s_axi_wready),
-            .s_axi_wstrb    (s_axi_wstrb),
-            .s_axi_wvalid   (s_axi_wvalid),
-
-
-            .m_axis_tdata   (m_axis_tdata),
-            .m_axis_tkeep   (m_axis_tkeep),
-            .m_axis_tlast   (m_axis_tlast),
-            .m_axis_tready  (m_axis_tready),
-            .m_axis_tvalid  (m_axis_tvalid),
-            .m_axis_tuser   (m_axis_tuser)
-
-        );
+            ) top_frame_subtraction_inst
+            (
+                .clk            (clk),
+                .resetn         (resetn),
+    
+    
+                .s_axi_awaddr   (s_axi_awaddr),
+                .s_axi_awprot   (s_axi_awprot),
+                .s_axi_awready  (s_axi_awready),
+                .s_axi_awvalid  (s_axi_awvalid),
+    
+                .s_axi_bready   (s_axi_bready),
+                .s_axi_bresp    (s_axi_bresp),
+                .s_axi_bvalid   (s_axi_bvalid),
+    
+                .s_axi_wdata    (s_axi_wdata),
+                .s_axi_wlast    (s_axi_wlast),
+                .s_axi_wready   (s_axi_wready),
+                .s_axi_wstrb    (s_axi_wstrb),
+                .s_axi_wvalid   (s_axi_wvalid),
+    
+    
+                .m_axis_tdata   (m_axis_tdata),
+                .m_axis_tkeep   (m_axis_tkeep),
+                .m_axis_tlast   (m_axis_tlast),
+                .m_axis_tready  (m_axis_tready),
+                .m_axis_tvalid  (m_axis_tvalid),
+                .m_axis_tuser   (m_axis_tuser)
+    
+            );
         end
         else if (INTERFACE_TYPE == "AXI_STREAM") begin : gen_axis
             top_frame_subtraction #(
-                .INTERFACE_TYPE (INTERFACE_TYPE),
-                .DATA_WIDTH     (S_AXI_DATA_WIDTH),
+                .INTERFACE_TYPE  (INTERFACE_TYPE),
+                .S_AXI_DATA_WIDTH(S_AXI_DATA_WIDTH),
                 //.PIXEL_WIDTH    (PIXEL_WIDTH),
-                .WIDTH_FRAME    (WIDTH_FRAME),
-                .HEIGHT_FRAME   (HEIGHT_FRAME)
+                .WIDTH_FRAME     (WIDTH_FRAME),
+                .HEIGHT_FRAME    (HEIGHT_FRAME)
             ) top_frame_subtraction_inst (
                 .clk            (clk),
                 .resetn         (resetn),
@@ -230,6 +230,7 @@ module tb_top_frame_subtraction();
     task axi_stream_write_line;
         input integer line_num;
         input integer words_per_line;
+        input integer base_offset;
 
         integer i;
 
@@ -238,22 +239,22 @@ module tb_top_frame_subtraction();
                 @(posedge clk);
                 //Data
                 s_axis_tdata <= {
-                    8'h00 + i[7:0],
-                    8'h10 + i[7:0],
-                    8'h20 + i[7:0],
-                    8'h30 + i[7:0],
-                    8'h40 + i[7:0],
-                    8'h50 + i[7:0],
-                    8'h60 + i[7:0],
-                    8'h70 + i[7:0],
-                    8'h80 + i[7:0],
-                    8'h90 + i[7:0],
-                    8'hA0 + i[7:0],
-                    8'hB0 + i[7:0],
-                    8'hC0 + i[7:0],
-                    8'hD0 + i[7:0],
-                    8'hE0 + i[7:0],
-                    8'hF0 + i[7:0]
+                    8'h00 + ((i + base_offset) % 256),
+                    8'h10 + ((i + base_offset + 1) % 256),
+                    8'h20 + ((i + base_offset + 2) % 256),
+                    8'h30 + ((i + base_offset + 3) % 256),
+                    8'h40 + ((i + base_offset + 4) % 256),
+                    8'h50 + ((i + base_offset + 5) % 256),
+                    8'h60 + ((i + base_offset + 6) % 256),
+                    8'h70 + ((i + base_offset + 7) % 256),
+                    8'h80 + ((i + base_offset + 8) % 256),
+                    8'h90 + ((i + base_offset + 9) % 256),
+                    8'hA0 + ((i + base_offset + 10) % 256),
+                    8'hB0 + ((i + base_offset + 11) % 256),
+                    8'hC0 + ((i + base_offset + 12) % 256),
+                    8'hD0 + ((i + base_offset + 13) % 256),
+                    8'hE0 + ((i + base_offset + 14) % 256),
+                    8'hF0 + ((i + base_offset + 15) % 256)
                 };
                 s_axis_tkeep <= 16'hFFFF;
                 s_axis_tvalid <= 1'b1;
@@ -334,8 +335,9 @@ module tb_top_frame_subtraction();
             axi_write_burst(32'h0000_1000, 120);
             axi_write_burst(32'h0000_1000, 120);
         end else if (INTERFACE_TYPE == "AXI_STREAM") begin
-            for (i = 0; i < HEIGHT_FRAME*3; i = i + 1) begin
-                axi_stream_write_line(2, 120);
+            for (i = 0; i < HEIGHT_FRAME*2; i = i + 1) begin
+                axi_stream_write_line(2, 120, i);
+                axi_stream_write_line(2, 120, i+5);
             end
             //TEST_1.
             $display("========================================");

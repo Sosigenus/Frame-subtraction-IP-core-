@@ -85,7 +85,7 @@ module top_frame_subtraction #(
     output wire                             s_axis_tready,
     input  wire                             s_axis_tlast,
     input  wire                             s_axis_tuser,
-    
+
     //AXI-Stream master
     output wire [M_AXIS_DATA_WIDTH-1:0]     m_axis_tdata,
     output wire [M_AXIS_DATA_WIDTH/8-1:0]   m_axis_tkeep,
@@ -93,19 +93,19 @@ module top_frame_subtraction #(
     input  wire                             m_axis_tready,
     output wire                             m_axis_tvalid,
     output wire                             m_axis_tuser
-    
+
     );
-    
+
     //temp
-    localparam PIXEL_WIDTH  = 8;
-    
+    //localparam PIXEL_WIDTH  = 8;
+
     //Signals for buffer
     wire                        buf_wr_en;
     wire [S_AXI_DATA_WIDTH-1:0] buf_wr_data;
-    wire [31:0]                 buf_wr_addr;
+    wire [S_AXI_ADDR_WIDTH-1:0] buf_wr_addr;
     wire                        buf_wr_last;
     wire                        buf_wr_full;
-    
+
     //Signals for proccessing
     wire [S_AXI_DATA_WIDTH-1:0] rd_data_a;
     wire [S_AXI_DATA_WIDTH-1:0] rd_data_b;
@@ -175,7 +175,6 @@ module top_frame_subtraction #(
 
     buffer_videostream # (
         .DATA_WIDTH     (S_AXI_DATA_WIDTH),
-        .PIXEL_WIDTH    (PIXEL_WIDTH),
         .WIDTH_FRAME    (WIDTH_FRAME),
         .HEIGHT_FRAME   (HEIGHT_FRAME)
     ) buffer_videostream_inst
