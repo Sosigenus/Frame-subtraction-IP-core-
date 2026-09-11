@@ -18,33 +18,34 @@
 //*****************************************************************//
 `timescale 1ns / 1ps
 `default_nettype none
-module frame_subtraction #(
-    parameter DATA_WIDTH = 128
-    )
-    (
-        //System signals
-        input wire clk,
-        input wire resetn,
-        
-        //Input signals to proccessing
-        input   wire [DATA_WIDTH-1:0]   rd_data_a,
-        input   wire [DATA_WIDTH-1:0]   rd_data_b,
-        input   wire                    rd_valid,
-        output  wire                    rd_ready,
-        input   wire                    rd_last,
-        input   wire                    rd_user,
-        
-        //Output signals to AXI-Stream
-        output  wire [DATA_WIDTH-1:0]   m_axis_tdata,
-        output  wire [DATA_WIDTH/8-1:0] m_axis_tkeep,
-        output  wire                    m_axis_tlast,
-        input   wire                    m_axis_tready,
-        output  wire                    m_axis_tvalid,
-        output  wire                    m_axis_tuser
-    );
 
-    //Localparameter
-    localparam              PIXEL_WIDTH = 8;
+module frame_subtraction #(
+    parameter DATA_WIDTH = 128,
+
+    parameter PIXEL_WIDTH = 8
+)
+(
+    //System signals
+    input wire clk,
+    input wire resetn,
+
+    //Input signals to proccessing
+    input   wire [DATA_WIDTH-1:0]   rd_data_a,
+    input   wire [DATA_WIDTH-1:0]   rd_data_b,
+    input   wire                    rd_valid,
+    output  wire                    rd_ready,
+    input   wire                    rd_last,
+    input   wire                    rd_user,
+
+    //Output signals to AXI-Stream
+    output  wire [DATA_WIDTH-1:0]   m_axis_tdata,
+    output  wire [DATA_WIDTH/8-1:0] m_axis_tkeep,
+    output  wire                    m_axis_tlast,
+    input   wire                    m_axis_tready,
+    output  wire                    m_axis_tvalid,
+    output  wire                    m_axis_tuser
+);
+
     //Register for assign
     reg                     rd_last_reg;
     reg                     rd_user_reg;
@@ -63,16 +64,16 @@ module frame_subtraction #(
     //Capture data
     always @(posedge clk) begin
         if (!resetn) begin
-            a_reg <= {DATA_WIDTH{1'b0}};
-            b_reg <= {DATA_WIDTH{1'b0}};
+            a_reg             <= {DATA_WIDTH{1'b0}};
+            b_reg             <= {DATA_WIDTH{1'b0}};
             capture_valig_reg <= 1'b0;
             rd_last_reg       <= 1'b0;
             rd_user_reg       <= 1'b0;
         end
         else begin
             if (rd_valid && rd_ready) begin
-                a_reg <= rd_data_a;
-                b_reg <= rd_data_b;
+                a_reg             <= rd_data_a;
+                b_reg             <= rd_data_b;
 
                 capture_valig_reg <= 1'b1;
                 rd_last_reg       <= rd_last;

@@ -1,0 +1,2 @@
+# This file is automatically written.  Do not modify.
+proc gen_USERPARAMETER_M_AXIS_DATA_WIDTH_VALUE {M_AXI_DATA_WIDTH } {expr $M_AXI_DATA_WIDTH}

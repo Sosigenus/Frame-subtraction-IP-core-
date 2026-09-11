@@ -1,3 +1,7 @@
+
+# Loading additional proc with user specified bodies to compute parameter values.
+source [file join [file dirname [file dirname [info script]]] gui/frame_subtraction_v1_0.gtcl]
+
 # Definitional proc to organize widgets for parameters.
 proc init_gui { IPINST } {
   ipgui::add_param $IPINST -name "Component_Name"
@@ -7,27 +11,30 @@ proc init_gui { IPINST } {
   #Adding Group
   set Width [ipgui::add_group $IPINST -name "Width" -parent ${Page_0}]
   set_property tooltip {Width} ${Width}
-  ipgui::add_param $IPINST -name "S_AXI_ADDR_WIDTH" -parent ${Width}
+  ipgui::add_param $IPINST -name "M_AXI_ADDR_WIDTH" -parent ${Width}
+  ipgui::add_param $IPINST -name "M_AXI_DATA_WIDTH" -parent ${Width} -widget comboBox
   ipgui::add_param $IPINST -name "M_AXIS_DATA_WIDTH" -parent ${Width}
-  ipgui::add_param $IPINST -name "S_AXI_DATA_WIDTH" -parent ${Width}
 
   #Adding Group
-  set Setting_frame [ipgui::add_group $IPINST -name "Setting frame" -parent ${Page_0} -display_name {Size frame}]
-  set_property tooltip {Size frame} ${Setting_frame}
-  ipgui::add_static_text $IPINST -name "warning" -parent ${Setting_frame} -text {<b> WIDTH_FRAME </b> must be a multiple of <b> DATA_WIDTH/8 </b>}
-  ipgui::add_param $IPINST -name "WIDTH_FRAME" -parent ${Setting_frame}
-  ipgui::add_param $IPINST -name "HEIGHT_FRAME" -parent ${Setting_frame}
+  set Size_frame [ipgui::add_group $IPINST -name "Size frame" -parent ${Page_0}]
+  set_property tooltip {Size frame} ${Size_frame}
+  ipgui::add_static_text $IPINST -name "Size frame (WIDTH_FRAME)" -parent ${Size_frame} -text {<b> WIDTH_FRAME </b> must be a multiple of <b> DATA_WIDTH/8 </b>}
 
 
 
 }
 
-proc update_PARAM_VALUE.HEIGHT_FRAME { PARAM_VALUE.HEIGHT_FRAME } {
-	# Procedure called to update HEIGHT_FRAME when any of the dependent parameters in the arguments change
+proc update_PARAM_VALUE.M_AXIS_DATA_WIDTH { PARAM_VALUE.M_AXIS_DATA_WIDTH PARAM_VALUE.M_AXI_DATA_WIDTH } {
+	# Procedure called to update M_AXIS_DATA_WIDTH when any of the dependent parameters in the arguments change
+	
+	set M_AXIS_DATA_WIDTH ${PARAM_VALUE.M_AXIS_DATA_WIDTH}
+	set M_AXI_DATA_WIDTH ${PARAM_VALUE.M_AXI_DATA_WIDTH}
+	set values(M_AXI_DATA_WIDTH) [get_property value $M_AXI_DATA_WIDTH]
+	set_property value [gen_USERPARAMETER_M_AXIS_DATA_WIDTH_VALUE $values(M_AXI_DATA_WIDTH)] $M_AXIS_DATA_WIDTH
 }
 
-proc validate_PARAM_VALUE.HEIGHT_FRAME { PARAM_VALUE.HEIGHT_FRAME } {
-	# Procedure called to validate HEIGHT_FRAME
+proc validate_PARAM_VALUE.M_AXIS_DATA_WIDTH { PARAM_VALUE.M_AXIS_DATA_WIDTH } {
+	# Procedure called to validate M_AXIS_DATA_WIDTH
 	return true
 }
 
@@ -40,39 +47,21 @@ proc validate_PARAM_VALUE.INTERFACE_TYPE { PARAM_VALUE.INTERFACE_TYPE } {
 	return true
 }
 
-proc update_PARAM_VALUE.M_AXIS_DATA_WIDTH { PARAM_VALUE.M_AXIS_DATA_WIDTH } {
-	# Procedure called to update M_AXIS_DATA_WIDTH when any of the dependent parameters in the arguments change
+proc update_PARAM_VALUE.M_AXI_ADDR_WIDTH { PARAM_VALUE.M_AXI_ADDR_WIDTH } {
+	# Procedure called to update M_AXI_ADDR_WIDTH when any of the dependent parameters in the arguments change
 }
 
-proc validate_PARAM_VALUE.M_AXIS_DATA_WIDTH { PARAM_VALUE.M_AXIS_DATA_WIDTH } {
-	# Procedure called to validate M_AXIS_DATA_WIDTH
+proc validate_PARAM_VALUE.M_AXI_ADDR_WIDTH { PARAM_VALUE.M_AXI_ADDR_WIDTH } {
+	# Procedure called to validate M_AXI_ADDR_WIDTH
 	return true
 }
 
-proc update_PARAM_VALUE.S_AXI_ADDR_WIDTH { PARAM_VALUE.S_AXI_ADDR_WIDTH } {
-	# Procedure called to update S_AXI_ADDR_WIDTH when any of the dependent parameters in the arguments change
+proc update_PARAM_VALUE.M_AXI_DATA_WIDTH { PARAM_VALUE.M_AXI_DATA_WIDTH } {
+	# Procedure called to update M_AXI_DATA_WIDTH when any of the dependent parameters in the arguments change
 }
 
-proc validate_PARAM_VALUE.S_AXI_ADDR_WIDTH { PARAM_VALUE.S_AXI_ADDR_WIDTH } {
-	# Procedure called to validate S_AXI_ADDR_WIDTH
-	return true
-}
-
-proc update_PARAM_VALUE.S_AXI_DATA_WIDTH { PARAM_VALUE.S_AXI_DATA_WIDTH } {
-	# Procedure called to update S_AXI_DATA_WIDTH when any of the dependent parameters in the arguments change
-}
-
-proc validate_PARAM_VALUE.S_AXI_DATA_WIDTH { PARAM_VALUE.S_AXI_DATA_WIDTH } {
-	# Procedure called to validate S_AXI_DATA_WIDTH
-	return true
-}
-
-proc update_PARAM_VALUE.WIDTH_FRAME { PARAM_VALUE.WIDTH_FRAME } {
-	# Procedure called to update WIDTH_FRAME when any of the dependent parameters in the arguments change
-}
-
-proc validate_PARAM_VALUE.WIDTH_FRAME { PARAM_VALUE.WIDTH_FRAME } {
-	# Procedure called to validate WIDTH_FRAME
+proc validate_PARAM_VALUE.M_AXI_DATA_WIDTH { PARAM_VALUE.M_AXI_DATA_WIDTH } {
+	# Procedure called to validate M_AXI_DATA_WIDTH
 	return true
 }
 
@@ -82,28 +71,18 @@ proc update_MODELPARAM_VALUE.INTERFACE_TYPE { MODELPARAM_VALUE.INTERFACE_TYPE PA
 	set_property value [get_property value ${PARAM_VALUE.INTERFACE_TYPE}] ${MODELPARAM_VALUE.INTERFACE_TYPE}
 }
 
-proc update_MODELPARAM_VALUE.S_AXI_ADDR_WIDTH { MODELPARAM_VALUE.S_AXI_ADDR_WIDTH PARAM_VALUE.S_AXI_ADDR_WIDTH } {
-	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
-	set_property value [get_property value ${PARAM_VALUE.S_AXI_ADDR_WIDTH}] ${MODELPARAM_VALUE.S_AXI_ADDR_WIDTH}
-}
-
-proc update_MODELPARAM_VALUE.S_AXI_DATA_WIDTH { MODELPARAM_VALUE.S_AXI_DATA_WIDTH PARAM_VALUE.S_AXI_DATA_WIDTH } {
-	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
-	set_property value [get_property value ${PARAM_VALUE.S_AXI_DATA_WIDTH}] ${MODELPARAM_VALUE.S_AXI_DATA_WIDTH}
-}
-
-proc update_MODELPARAM_VALUE.WIDTH_FRAME { MODELPARAM_VALUE.WIDTH_FRAME PARAM_VALUE.WIDTH_FRAME } {
-	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
-	set_property value [get_property value ${PARAM_VALUE.WIDTH_FRAME}] ${MODELPARAM_VALUE.WIDTH_FRAME}
-}
-
-proc update_MODELPARAM_VALUE.HEIGHT_FRAME { MODELPARAM_VALUE.HEIGHT_FRAME PARAM_VALUE.HEIGHT_FRAME } {
-	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
-	set_property value [get_property value ${PARAM_VALUE.HEIGHT_FRAME}] ${MODELPARAM_VALUE.HEIGHT_FRAME}
-}
-
 proc update_MODELPARAM_VALUE.M_AXIS_DATA_WIDTH { MODELPARAM_VALUE.M_AXIS_DATA_WIDTH PARAM_VALUE.M_AXIS_DATA_WIDTH } {
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
 	set_property value [get_property value ${PARAM_VALUE.M_AXIS_DATA_WIDTH}] ${MODELPARAM_VALUE.M_AXIS_DATA_WIDTH}
+}
+
+proc update_MODELPARAM_VALUE.M_AXI_ADDR_WIDTH { MODELPARAM_VALUE.M_AXI_ADDR_WIDTH PARAM_VALUE.M_AXI_ADDR_WIDTH } {
+	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
+	set_property value [get_property value ${PARAM_VALUE.M_AXI_ADDR_WIDTH}] ${MODELPARAM_VALUE.M_AXI_ADDR_WIDTH}
+}
+
+proc update_MODELPARAM_VALUE.M_AXI_DATA_WIDTH { MODELPARAM_VALUE.M_AXI_DATA_WIDTH PARAM_VALUE.M_AXI_DATA_WIDTH } {
+	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
+	set_property value [get_property value ${PARAM_VALUE.M_AXI_DATA_WIDTH}] ${MODELPARAM_VALUE.M_AXI_DATA_WIDTH}
 }
 

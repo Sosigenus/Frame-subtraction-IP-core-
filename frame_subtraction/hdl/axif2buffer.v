@@ -5,7 +5,7 @@
 // Version:      v1.0                                              //
 // Library:      None                                              //
 // Parent:       none                                              //
-// Description:  Module receive data to buffer.                    //
+// Description:  AXI4-Full Master to read data from DDR to buffer. //
 //                                                                 //
 //               Please refer to the Product Guide for more        //
 //               detailed information.                             //
@@ -13,67 +13,104 @@
 // Author(s):    M. Dumanski                                       //
 //                                                                 //
 // History:                                                        //
-//    29.08.2026 - (v1.0) Initial version                          //
+//    11.09.2026 - (v1.0) Initial version                          //
 //                                                                 //
 //*****************************************************************//
 `timescale 1ns / 1ps
 `default_nettype none
+
 module axif2buffer #
 (
     parameter S_AXI_ADDR_WIDTH = 32,
-    parameter S_AXI_DATA_WIDTH = 128      
+    parameter S_AXI_DATA_WIDTH = 128,
+    parameter BURST_LEN        = 16  //Amount beats in burst
 )
 (
     //System signals
     input  wire clk,
     input  wire resetn,
     
-    //AXI4-Full slave
-    //Address write channel
-    input  wire [S_AXI_ADDR_WIDTH-1:0]      s_axi_awaddr,
-    input  wire [2:0]                       s_axi_awprot,
-    input  wire                             s_axi_awvalid,
-    output wire                             s_axi_awready,
+    //AXI4-Full Master
+    //Address channel
+    output wire  [S_AXI_ADDR_WIDTH-1:0] m_axi_araddr,
+    output wire  [1:0]                  m_axi_arburst,
+    output wire  [3:0]                  m_axi_arcache,
+    //output reg  [3:0]                   m_axi_arid,
+    output wire  [7:0]                  m_axi_arlen,
+    //output reg                          m_axi_arlock,
+    output wire  [2:0]                  m_axi_arprot,
+    input  wire                         m_axi_arready,
+    output wire  [2:0]                  m_axi_arsize,
+    output wire                         m_axi_arvalid,
     
-    //Write data channel
-    input  wire [S_AXI_DATA_WIDTH-1:0]      s_axi_wdata,
-    input  wire [S_AXI_DATA_WIDTH/8-1:0]    s_axi_wstrb,
-    input  wire                             s_axi_wvalid,
-    output wire                             s_axi_wready,
-    input  wire                             s_axi_wlast,
+    //Read channel
+    input  wire [S_AXI_DATA_WIDTH-1:0]  m_axi_rdata,
+    //input  wire [3:0]                   m_axi_rid,
+    input  wire                         m_axi_rlast,
+    input  wire                         m_axi_rvalid,
+    output wire                         m_axi_rready,
+    input  wire [1:0]                   m_axi_rresp,
     
-    //Write response channel
-    output wire [1:0]                       s_axi_bresp,
-    output wire                             s_axi_bvalid,
-    input  wire                             s_axi_bready,
+    //GPIO
+    input  wire [31:0]                  start_addr,      //Address in DDR, for read
+    input  wire [31:0]                  width_frame,     //Size line
+    input  wire [31:0]                  height_frame,
+    input  wire                         start,           //Signal start
+    output wire                         done,            //Signal finish
     
-    //Output signals to buffer
-    output wire                         buf_wr_en,      
-    output wire [S_AXI_DATA_WIDTH-1:0]  buf_wr_data,    
-    output wire [31:0]                  buf_wr_addr,   
-    output wire                         buf_wr_last,   
-    input  wire                         buf_wr_full  
+    //Output
+    output wire [31:0]                  capture_width_frame,
+    output wire [31:0]                  capture_height_frame,
+    
+    output wire                         buf_wr_en,
+    output wire [S_AXI_DATA_WIDTH-1:0]  buf_wr_data,
+    output wire [31:0]                  buf_wr_addr,
+    output wire                         buf_wr_last,
+    input  wire                         buf_wr_full
 );
 
-    //Register for assign
+    //Localparameter
+    localparam          BYTES_PER_WORD  = S_AXI_DATA_WIDTH / 8;
+    localparam          BYTES_PER_BURST = BYTES_PER_WORD * BURST_LEN;
+    localparam          SHIFT_TO_BEATS  = $clog2(S_AXI_DATA_WIDTH/8);
+
+    localparam [2:0]    ARSIZE          = $clog2(S_AXI_DATA_WIDTH/8);
+    localparam          ARBUST_INCR     = 2'b01;
+
+    //State FSM
+    localparam IDLE      = 5'b00001;
+    localparam ADDR      = 5'b00010;
+    localparam DATA      = 5'b00100;
+    localparam WAIT_FULL = 5'b01000;
+    localparam DONE      = 5'b10000;
+
+    reg [4:0] state, next_state;
+
+    //Register output
+    reg [S_AXI_ADDR_WIDTH-1:0]  m_axi_araddr_reg;
+    reg [1:0]                   m_axi_arburst_reg;
+    reg [3:0]                   m_axi_arcache_reg;
+    reg [7:0]                   m_axi_arlen_reg;
+    reg [2:0]                   m_axi_arprot_reg;
+    reg [2:0]                   m_axi_arsize_reg;
+    reg                         m_axi_arvalid_reg;
+
+    //Counters
+    reg [31:0]                  bytes_remaining; //Remaining read byte
+    reg [31:0]                  current_addr;    //Current address Текущий адрес чтения
+    reg [7:0]                   beat_cnt;        //Counter beats in burst
+    reg                         burst_done;      //Flag finish burst
+
+    //Register output
+    reg [31:0]                  capture_width_frame_reg;
+    reg [31:0]                  capture_height_frame_reg;
+
     reg                         buf_wr_en_reg;
     reg [S_AXI_DATA_WIDTH-1:0]  buf_wr_data_reg;
     reg [31:0]                  buf_wr_addr_reg;
     reg                         buf_wr_last_reg;
 
-    //State FSM
-    localparam IDLE     = 4'b0001;
-    localparam ADDR     = 4'b0010;
-    localparam DATA     = 4'b0100;
-    localparam RESP     = 4'b1000;
-
-    reg [3:0] state, next_state;
-
-    //Current address
-    reg [S_AXI_ADDR_WIDTH-1:0]  current_addr;
-    reg                         addr_valid;  
-
-    //Logic FSM
+    //FSM
     always @(posedge clk) begin
         if (!resetn) begin
             state <= IDLE;
@@ -86,87 +123,199 @@ module axif2buffer #
         next_state = state;
         case (state)
             IDLE: begin
-                //Wait request to write
-                if (s_axi_awvalid) next_state = ADDR;
-            end
-            
-            ADDR: begin
-                //Wait, while address_ready valid
-                if (s_axi_awready) next_state = DATA;
-            end
-            
-            DATA: begin
-                //Receive data, while WLAST = 0
-                if (s_axi_wvalid && s_axi_wready && s_axi_wlast) begin
-                    if (buf_wr_full) next_state = DATA; //Wait for buffer empty
-                    else next_state = RESP;
+                if (start && !buf_wr_full) begin
+                    next_state = ADDR;
                 end
             end
-            
-            RESP: begin
-                //Send answer
-                if (s_axi_bvalid && s_axi_bready) next_state = IDLE;
+
+            ADDR: begin
+                //Wait, while memory receive address
+                if (m_axi_arready && m_axi_arvalid) begin
+                    next_state = DATA;
+                end
             end
-            
+
+            DATA: begin
+                //If last beat in burst
+                if (m_axi_rvalid && m_axi_rready && m_axi_rlast) begin
+                    if (bytes_remaining <= BYTES_PER_BURST) begin
+                        next_state = DONE;
+                    end else begin
+                        next_state = ADDR;
+                    end
+                end
+            end
+
+            DONE: begin
+                next_state = IDLE;
+            end
+
             default: next_state = IDLE;
         endcase
     end
 
-    //Output AXI4 signals
     //Address channel
-    assign s_axi_awready = (state == ADDR);
-
-    //Write data channel
-    assign s_axi_wready = (state == DATA) && !buf_wr_full;
-
-    //Write response channel
-    reg bvalid_reg;
+    //assign m_axi_arvalid = (state == ADDR);
     always @(posedge clk) begin
         if (!resetn) begin
-            bvalid_reg <= 1'b0;
-        end else if (state == RESP) begin
-            bvalid_reg <= 1'b1;
-        end else if (s_axi_bready) begin
-            bvalid_reg <= 1'b0;
-        end
-    end
-
-    assign s_axi_bvalid = bvalid_reg;
-    assign s_axi_bresp  = 2'b00;  // OKAY
-
-    //Capture address
-    always @(posedge clk) begin
-        if (!resetn) begin
-            current_addr <= {S_AXI_ADDR_WIDTH{1'b0}};
-        end else if (s_axi_awvalid && s_axi_awready) begin
-            current_addr <= s_axi_awaddr;
-        end
-    end
-
-    //Output signals to buffer
-    always @(posedge clk) begin
-        if (!resetn) begin
-            buf_wr_en_reg   <= 1'b0;
-            buf_wr_data_reg <= {S_AXI_DATA_WIDTH{1'b0}};
-            buf_wr_addr_reg <= {S_AXI_ADDR_WIDTH{1'b0}};
-            buf_wr_last_reg <= 1'b0;
-        end else if (state == DATA && s_axi_wvalid && s_axi_wready && !buf_wr_full) begin
-            //Handshake
-            buf_wr_en_reg   <= 1'b1;
-            buf_wr_data_reg <= s_axi_wdata;
-            buf_wr_addr_reg <= current_addr;
-            buf_wr_last_reg <= s_axi_wlast;
+            m_axi_araddr_reg  <= {S_AXI_ADDR_WIDTH{1'b0}};
+            m_axi_arlen_reg   <= 8'b0;
+            m_axi_arsize_reg  <= 3'b0;
+            m_axi_arburst_reg <= 2'b0;
+            m_axi_arprot_reg  <= 3'b000;
+            m_axi_arcache_reg <= 4'b0011;
+            m_axi_arvalid_reg <= 1'b0;
         end else begin
-            buf_wr_en_reg   <= 1'b0;
-            buf_wr_last_reg <= 1'b0;
+            case (state)
+                IDLE: begin
+                    //pass
+                end
+
+                ADDR: begin
+                    //Parameters burst
+                    m_axi_arvalid_reg <= (m_axi_arready && m_axi_arvalid) ? 1'b0 : 1'b1;
+                    m_axi_arsize_reg  <= ARSIZE;        // 16 byte (2^4 = 16)
+                    m_axi_arburst_reg <= ARBUST_INCR;   // INCR burst
+                    m_axi_araddr_reg  <= current_addr;
+                    if (bytes_remaining >= BYTES_PER_BURST) begin
+                        m_axi_arlen_reg <= BURST_LEN - 1;  // len = beats - 1
+                    end
+                    else begin
+                        m_axi_arlen_reg <= (bytes_remaining >> SHIFT_TO_BEATS) - 1;
+                    end
+
+                end
+
+                DATA: begin
+                    //pass
+                end
+
+                default: begin
+                    //pass
+                end
+            endcase
         end
     end
 
-    //Assignments
-    assign buf_wr_en    = buf_wr_en_reg;
-    assign buf_wr_data  = buf_wr_data_reg;
-    assign buf_wr_addr  = buf_wr_addr_reg;
-    assign buf_wr_last  = buf_wr_last_reg;
+    assign m_axi_rready = (state == DATA) && !buf_wr_full;
+    //Read data channel
+    always @(posedge clk) begin
+        if (!resetn) begin
+            beat_cnt   <= 8'b0;
+            burst_done <= 1'b0;
+        end else begin
+            case (state)
+                DATA: begin
+                    if (m_axi_rvalid && m_axi_rready) begin
+
+                        //Receive data
+                        buf_wr_en_reg   <= 1'b1;
+                        buf_wr_data_reg <= m_axi_rdata;
+                        buf_wr_addr_reg <= current_addr; //not correct (no matter, because not use)
+
+                        //If last beat
+                        if (m_axi_rlast) begin
+                            beat_cnt   <= 8'b0;
+                            burst_done <= 1'b1;
+                        end
+                        else begin
+                            beat_cnt   <= beat_cnt + 1;
+                            burst_done <= 1'b0;
+                        end
+                    end
+                    else begin
+                        buf_wr_en_reg <= 1'b0;
+                    end
+                end
+
+                default: begin
+                    buf_wr_en_reg <= 1'b0;
+                    beat_cnt      <= 8'b0;
+                    burst_done    <= 1'b0;
+                end
+            endcase
+        end
+    end
+
+    //Control address and counters
+    always @(posedge clk) begin
+        if (!resetn) begin
+            current_addr    <= 32'h0000_0000;
+            bytes_remaining <= 32'h0000_0000;
+
+            capture_width_frame_reg  <= 32'h0000_0000;
+            capture_height_frame_reg <= 32'h0000_0000;
+        end else begin
+            case (state)
+                IDLE: begin
+                    if (start && !buf_wr_full) begin
+                        current_addr             <= start_addr;
+                        bytes_remaining          <= width_frame;
+
+                        capture_width_frame_reg  <= width_frame;
+                        capture_height_frame_reg <= height_frame;
+                    end
+                end
+
+                DATA: begin
+                    if (m_axi_rvalid && m_axi_rready) begin
+                        current_addr    <= current_addr + BYTES_PER_WORD;
+                        bytes_remaining <= bytes_remaining - BYTES_PER_WORD;
+                    end
+                end
+
+                DONE: begin
+                    //pass
+                end
+
+                default: begin
+                    //pass
+                end
+            endcase
+        end
+    end
+
+    //buf_wr_last
+    always @(posedge clk) begin
+        if (!resetn) begin
+            buf_wr_last_reg <= 1'b0;
+        end else begin
+            buf_wr_last_reg <= m_axi_rvalid                        &&
+                               m_axi_rready                        &&
+                               m_axi_rlast                         &&
+                               (bytes_remaining <= BYTES_PER_WORD)  ? 1'b1 : 1'b0;
+        end
+    end
+
+    //Signal finish
+    reg done_reg;
+    always @(posedge clk) begin
+        if (!resetn) begin
+            done_reg <= 1'b0;
+        end
+        else begin
+            done_reg <= (state == DONE) ? 1'b1 : 1'b0;
+        end
+    end
+
+    //Assigments
+    assign m_axi_araddr         = m_axi_araddr_reg;
+    assign m_axi_arburst        = m_axi_arburst_reg;
+    assign m_axi_arcache        = m_axi_arcache_reg;
+    assign m_axi_arlen          = m_axi_arlen_reg;
+    assign m_axi_arprot         = m_axi_arprot_reg;
+    assign m_axi_arsize         = m_axi_arsize_reg;
+    assign m_axi_arvalid        = m_axi_arvalid_reg;
+
+    assign capture_width_frame  = capture_width_frame_reg;
+    assign capture_height_frame = capture_height_frame_reg;
+
+    assign buf_wr_en            = buf_wr_en_reg;
+    assign buf_wr_data          = buf_wr_data_reg;
+    assign buf_wr_addr          = buf_wr_addr_reg;
+    assign buf_wr_last          = buf_wr_last_reg;
+
+    assign done                 = done_reg;
 
 endmodule
 `default_nettype wire

@@ -18,10 +18,11 @@
 //*****************************************************************//
 `timescale 1ns / 1ps
 `default_nettype none
+
 module buffer_videostream #(
-    parameter DATA_WIDTH    = 128,
-    parameter WIDTH_FRAME   = 1920,
-    parameter HEIGHT_FRAME  = 1080
+    parameter DATA_WIDTH    = 128
+    //parameter WIDTH_FRAME   = 1920,
+    //parameter HEIGHT_FRAME  = 1080
 )
 (
     //System signals
@@ -35,6 +36,9 @@ module buffer_videostream #(
     input  wire                    buf_wr_last,
     output wire                    buf_wr_full,
 
+    input wire  [31:0]             width_frame,
+    input wire  [31:0]             height_frame,
+
     //Output signals to processing
     output wire [DATA_WIDTH-1:0]   rd_data_a,
     output wire [DATA_WIDTH-1:0]   rd_data_b,
@@ -45,23 +49,14 @@ module buffer_videostream #(
 );
 
     //Parameters
-    localparam WORDS_PER_LINE = WIDTH_FRAME / (DATA_WIDTH / 8);
-    localparam PTR_WIDTH      = $clog2(WORDS_PER_LINE);
-    localparam ROWS_WIDTH     = $clog2(HEIGHT_FRAME);
+    localparam  BYTES_DATA_WIDTH = DATA_WIDTH / 8;
+    localparam  BYTES_DATA_LOG2  = $clog2(DATA_WIDTH / 8);
     
-    initial begin
-        if (WORDS_PER_LINE == 0) begin
-            $error("Must be: WIDTH_FRAME >= DATA_WIDTH/8");
-        end
-
-        if (WIDTH_FRAME % (DATA_WIDTH/8) != 0) begin
-            $error("WIDTH_FRAME must be a multiple of DATA_WIDTH/8");
-        end
-
-        if (HEIGHT_FRAME < 2 || HEIGHT_FRAME > 4320) begin
-            $error("Must be: HEIGHT_FRAME >= 2");
-        end
-    end
+    //
+    localparam  CELL_BRAM        = 7680 / BYTES_DATA_WIDTH;        //7680 max resolution (byte in line) 
+    wire [12:0] words_per_line   = width_frame >> BYTES_DATA_LOG2;
+    localparam  PTR_WIDTH        = $clog2(CELL_BRAM);
+    localparam  ROWS_WIDTH       = $clog2(CELL_BRAM)+1;
 
     //State FSM
     localparam BUF_PING_A = 4'b0001;
@@ -71,10 +66,10 @@ module buffer_videostream #(
     reg [3:0] buf_state;
 
     //BRAM
-    (* ram_style = "block" *) reg [DATA_WIDTH-1:0] bufferA_ping [0:15360-1];
-    (* ram_style = "block" *) reg [DATA_WIDTH-1:0] bufferA_pong [0:15360-1];
-    (* ram_style = "block" *) reg [DATA_WIDTH-1:0] bufferB_ping [0:15360-1];
-    (* ram_style = "block" *) reg [DATA_WIDTH-1:0] bufferB_pong [0:15360-1];
+    (* ram_style = "block" *) reg [DATA_WIDTH-1:0] bufferA_ping [0:CELL_BRAM-1];
+    (* ram_style = "block" *) reg [DATA_WIDTH-1:0] bufferA_pong [0:CELL_BRAM-1];
+    (* ram_style = "block" *) reg [DATA_WIDTH-1:0] bufferB_ping [0:CELL_BRAM-1];
+    (* ram_style = "block" *) reg [DATA_WIDTH-1:0] bufferB_pong [0:CELL_BRAM-1];
 
     //Pointer write
     reg [PTR_WIDTH-1:0] ptr_wr_a_ping;
@@ -166,7 +161,7 @@ module buffer_videostream #(
             if (buf_wr_en && !buf_wr_full_reg) begin
                 case (buf_state)
                     BUF_PING_A: begin // Frame 1, Ping
-                        if (ptr_wr_a_ping == WORDS_PER_LINE - 1) begin
+                        if (ptr_wr_a_ping == words_per_line - 1) begin
                             ptr_wr_a_ping <= 0;
                             buf_state     <= BUF_PING_B;
                         end else begin
@@ -175,7 +170,7 @@ module buffer_videostream #(
                     end
 
                     BUF_PING_B: begin // Frame 2, Ping
-                        if (ptr_wr_b_ping == WORDS_PER_LINE - 1) begin
+                        if (ptr_wr_b_ping == words_per_line - 1) begin
                             ptr_wr_b_ping <= 0;
                             ready_ping    <= 1'b1;
                             buf_state     <= BUF_PONG_A;
@@ -185,7 +180,7 @@ module buffer_videostream #(
                     end
 
                     BUF_PONG_A: begin // Frame 1, Pong
-                        if (ptr_wr_a_pong == WORDS_PER_LINE - 1) begin
+                        if (ptr_wr_a_pong == words_per_line - 1) begin
                             ptr_wr_a_pong <= 0;
                             buf_state     <= BUF_PONG_B;
                         end else begin
@@ -194,7 +189,7 @@ module buffer_videostream #(
                     end
 
                     BUF_PONG_B: begin // Frame 2, Pong
-                        if (ptr_wr_b_pong == WORDS_PER_LINE - 1) begin
+                        if (ptr_wr_b_pong == words_per_line - 1) begin
                             ptr_wr_b_pong <= 0;
                             ready_pong    <= 1'b1;
                             buf_state     <= BUF_PING_A;
@@ -213,7 +208,7 @@ module buffer_videostream #(
                     rd_valid_reg  <= 1'b1;
                     rd_user_reg   <= ptr_buf_rd == {PTR_WIDTH{1'b0}} ? 1'b1 : 1'b0;
 
-                    if (ptr_buf_rd == WORDS_PER_LINE - 1) begin
+                    if (ptr_buf_rd == words_per_line - 1) begin
                         ptr_buf_rd <= 0;
                         ready_ping <= 1'b0;
                     end else begin
@@ -225,7 +220,7 @@ module buffer_videostream #(
                     rd_valid_reg  <= 1'b1;
                     rd_user_reg   <= ptr_buf_rd == {PTR_WIDTH{1'b0}} ? 1'b1 : 1'b0;
 
-                    if (ptr_buf_rd == WORDS_PER_LINE - 1) begin
+                    if (ptr_buf_rd == words_per_line - 1) begin
                         ptr_buf_rd <= 0;
                         ready_pong <= 1'b0;
                     end else begin
@@ -259,7 +254,7 @@ module buffer_videostream #(
             counter_rows <= {ROWS_WIDTH{1'b0}};
         end
         else begin
-            if (HEIGHT_FRAME == counter_rows) begin
+            if (height_frame == counter_rows) begin
                 counter_rows <= {ROWS_WIDTH{1'b0}};
             end
             else if (rd_last) begin
@@ -272,8 +267,9 @@ module buffer_videostream #(
     assign rd_data_a   = rd_data_a_reg;
     assign rd_data_b   = rd_data_b_reg;
     assign rd_valid    = rd_valid_reg && (ready_ping || ready_pong);
-    assign rd_last     = (ptr_buf_rd == WORDS_PER_LINE - 1);
+    assign rd_last     = (ptr_buf_rd == words_per_line - 1);
     assign rd_user     = rd_user_reg && (counter_rows == {ROWS_WIDTH{1'b0}});
+
     assign buf_wr_full = buf_wr_full_reg;
 
 endmodule

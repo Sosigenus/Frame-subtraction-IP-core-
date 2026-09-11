@@ -24,44 +24,54 @@ module tb_top_frame_subtraction();
     parameter      SYS_CLK_MHZ		= 200.000;
 	localparam     HALF_PERIOD		= 1000.0 / SYS_CLK_MHZ / 2;
 
-    //S_AXI width
-    parameter      S_AXI_ADDR_WIDTH = 32;
-	parameter      S_AXI_DATA_WIDTH = 128;
-
-	//Size frame
-	parameter      WIDTH_FRAME     = 1920;
-	parameter      HEIGHT_FRAME    = 1080;
+    //M_AXI width
+    parameter      M_AXI_ADDR_WIDTH = 32;
+	parameter      M_AXI_DATA_WIDTH = 128;
 
 	//M_AXIS width
 	parameter      M_AXIS_DATA_WIDTH = 128;
 
 	//INTERFACE_TYPE
-	parameter      INTERFACE_TYPE    = "AXI_STREAM"; // AXI4_FULL or AXI_STREAM
+	parameter      INTERFACE_TYPE    = "AXI4_FULL"; // AXI4_FULL or AXI_STREAM
 	
 	//INPUT, OUTPUT top level
 	//System signals
 	reg clk;
 	reg resetn;
+	//
+	//Size frame
+	reg [31:0] width_frame;
+	reg [31:0] height_frame;
     //
-    //AXI4-FULL
-    reg [S_AXI_ADDR_WIDTH-1:0]      s_axi_awaddr;
-    reg [2:0]                       s_axi_awprot;
-    wire                            s_axi_awready;
-    reg                             s_axi_awvalid;
+    //AXI4-Full Master (MM2S)
+    //Address channel
+    wire  [M_AXI_ADDR_WIDTH-1:0]    m_axi_araddr;
+    wire  [1:0]                     m_axi_arburst;
+    wire  [3:0]                     m_axi_arcache;
+    //wire  [3:0]                     m_axi_arid;
+    wire  [7:0]                     m_axi_arlen;
+    //wire                            m_axi_arlock;
+    wire  [2:0]                     m_axi_arprot;
+    reg                             m_axi_arready;
+    wire  [2:0]                     m_axi_arsize;
+    wire                            m_axi_arvalid;
     //
-    reg                             s_axi_bready;
-    wire [1:0]                      s_axi_bresp;
-    wire                            s_axi_bvalid;
+    //Read data channel
+    reg [M_AXI_DATA_WIDTH-1:0]      m_axi_rdata;
+    //reg [3:0]                       m_axi_rid,
+    reg                             m_axi_rlast;
+    reg                             m_axi_rvalid;
+    wire                            m_axi_rready;
+    reg [1:0]                       m_axi_rresp;
     //
-    reg [S_AXI_DATA_WIDTH-1:0]      s_axi_wdata;
-    reg                             s_axi_wlast;
-    wire                            s_axi_wready;
-    reg [S_AXI_DATA_WIDTH/8-1:0]    s_axi_wstrb;
-    reg                             s_axi_wvalid;
+    reg [31:0]                      start_addr;
+    reg [31:0]                      bytes_to_read;
+    reg                             start;
+    wire                            done;
     //
     //AXI-Stream slave
-    reg [S_AXI_DATA_WIDTH-1:0]      s_axis_tdata;
-    reg [S_AXI_DATA_WIDTH/8-1:0]    s_axis_tkeep;
+    reg [M_AXI_DATA_WIDTH-1:0]      s_axis_tdata;
+    reg [M_AXI_DATA_WIDTH/8-1:0]    s_axis_tkeep;
     reg                             s_axis_tvalid;
     wire                            s_axis_tready;
     reg                             s_axis_tlast;
@@ -79,152 +89,198 @@ module tb_top_frame_subtraction();
     generate
         if (INTERFACE_TYPE == "AXI4_FULL") begin : gen_axif
             top_frame_subtraction #(
-                .INTERFACE_TYPE     (INTERFACE_TYPE),
+                .INTERFACE_TYPE     (INTERFACE_TYPE  ),
 
-                .S_AXI_ADDR_WIDTH   (S_AXI_ADDR_WIDTH),
-                .S_AXI_DATA_WIDTH   (S_AXI_DATA_WIDTH),
-
-                .WIDTH_FRAME    (WIDTH_FRAME),
-                .HEIGHT_FRAME   (HEIGHT_FRAME)
+                .M_AXI_ADDR_WIDTH   (M_AXI_ADDR_WIDTH),
+                .M_AXI_DATA_WIDTH   (M_AXI_DATA_WIDTH)
             ) top_frame_subtraction_inst
             (
-                .clk            (clk),
-                .resetn         (resetn),
+                .clk                (clk          ),
+                .resetn             (resetn       ),
+    
+                .m_axi_araddr       (m_axi_araddr ),
+                .m_axi_arburst      (m_axi_arburst),
+                .m_axi_arcache      (m_axi_arcache),
+                //.m_axi_arid         (m_axi_arid),
+                .m_axi_arlen        (m_axi_arlen  ),
+                //.m_axi_arlock       (m_axi_arlock),
+                .m_axi_arprot       (m_axi_arprot ),
+                .m_axi_arready      (m_axi_arready),
+                .m_axi_arsize       (m_axi_arsize ),
+                .m_axi_arvalid      (m_axi_arvalid),
+
+                .m_axi_rdata        (m_axi_rdata  ),
+                //.m_axi_rid          (m_axi_rid),
+                .m_axi_rlast        (m_axi_rlast  ),
+                .m_axi_rvalid       (m_axi_rvalid ),
+                .m_axi_rready       (m_axi_rready ),
+                .m_axi_rresp        (m_axi_rresp  ),
+
+                //GPIO
+                .start_addr         (start_addr   ),
+                .width_frame        (width_frame  ),
+                .height_frame       (height_frame ),
+                .start              (start        ),
+                .done               (done         ),
     
     
-                .s_axi_awaddr   (s_axi_awaddr),
-                .s_axi_awprot   (s_axi_awprot),
-                .s_axi_awready  (s_axi_awready),
-                .s_axi_awvalid  (s_axi_awvalid),
-    
-                .s_axi_bready   (s_axi_bready),
-                .s_axi_bresp    (s_axi_bresp),
-                .s_axi_bvalid   (s_axi_bvalid),
-    
-                .s_axi_wdata    (s_axi_wdata),
-                .s_axi_wlast    (s_axi_wlast),
-                .s_axi_wready   (s_axi_wready),
-                .s_axi_wstrb    (s_axi_wstrb),
-                .s_axi_wvalid   (s_axi_wvalid),
-    
-    
-                .m_axis_tdata   (m_axis_tdata),
-                .m_axis_tkeep   (m_axis_tkeep),
-                .m_axis_tlast   (m_axis_tlast),
-                .m_axis_tready  (m_axis_tready),
-                .m_axis_tvalid  (m_axis_tvalid),
-                .m_axis_tuser   (m_axis_tuser)
+                .m_axis_tdata       (m_axis_tdata ),
+                .m_axis_tkeep       (m_axis_tkeep ),
+                .m_axis_tlast       (m_axis_tlast ),
+                .m_axis_tready      (m_axis_tready),
+                .m_axis_tvalid      (m_axis_tvalid),
+                .m_axis_tuser       (m_axis_tuser )
     
             );
         end
         else if (INTERFACE_TYPE == "AXI_STREAM") begin : gen_axis
             top_frame_subtraction #(
-                .INTERFACE_TYPE  (INTERFACE_TYPE),
-                .S_AXI_DATA_WIDTH(S_AXI_DATA_WIDTH),
+                .INTERFACE_TYPE  (INTERFACE_TYPE  ),
+                .M_AXI_DATA_WIDTH(M_AXI_DATA_WIDTH)
                 //.PIXEL_WIDTH    (PIXEL_WIDTH),
-                .WIDTH_FRAME     (WIDTH_FRAME),
-                .HEIGHT_FRAME    (HEIGHT_FRAME)
-            ) top_frame_subtraction_inst (
-                .clk            (clk),
-                .resetn         (resetn),
+            ) top_frame_subtraction_inst
+            (
+                .clk            (clk          ),
+                .resetn         (resetn       ),
 
-                .s_axis_tdata   (s_axis_tdata),
+                .s_axis_tdata   (s_axis_tdata ),
                 .s_axis_tvalid  (s_axis_tvalid),
                 .s_axis_tready  (s_axis_tready),
-                .s_axis_tlast   (s_axis_tlast),
-                .s_axis_tkeep   (s_axis_tkeep),
-                .s_axis_tuser   (s_axis_tuser),
+                .s_axis_tlast   (s_axis_tlast ),
+                .s_axis_tkeep   (s_axis_tkeep ),
+                .s_axis_tuser   (s_axis_tuser ),
 
-                .m_axis_tdata   (m_axis_tdata),
-                .m_axis_tkeep   (m_axis_tkeep),
-                .m_axis_tlast   (m_axis_tlast),
+                .width_frame    (width_frame  ),
+                .height_frame   (height_frame ),
+
+                .m_axis_tdata   (m_axis_tdata ),
+                .m_axis_tkeep   (m_axis_tkeep ),
+                .m_axis_tlast   (m_axis_tlast ),
                 .m_axis_tready  (m_axis_tready),
                 .m_axis_tvalid  (m_axis_tvalid),
-                .m_axis_tuser   (m_axis_tuser)
+                .m_axis_tuser   (m_axis_tuser )
             );
         end
     endgenerate
 
+    integer beats_in_burst;
+    integer start_word;
     //Tasks
-    task axi_write_burst;
+    task axi_master_read_responder;
+        input integer memory_size;
+        input integer burst_len;
 
-        input [31:0] start_addr;
-        input integer num_beats;
-
-        integer i;
+        integer mem_ptr;
+        integer burst_cnt;
+        integer beat_cnt;
+        integer bytes_per_word;
 
         begin
-            //Address
-            @(posedge clk);
+            //Init
+            mem_ptr        = 0;
+            burst_cnt      = 0;
+            beat_cnt       = 0;
+            bytes_per_word = M_AXI_DATA_WIDTH / 8;
 
-            s_axi_awaddr  <= start_addr;
-            s_axi_awprot  <= 3'b000;
-            s_axi_awvalid <= 1'b1;
+            $display("Memory size = %0d words", memory_size);
 
-            //Wait for AW handshake
-            while (!s_axi_awready)
+            while (1) begin
                 @(posedge clk);
 
-            @(posedge clk);
-
-            s_axi_awvalid <= 1'b0;
-
-            //Data
-            for (i = 0; i < num_beats; i = i + 1) begin
-
-                s_axi_wdata <= {
-                    8'h00 + i[7:0],
-                    8'h10 + i[7:0],
-                    8'h20 + i[7:0],
-                    8'h30 + i[7:0],
-                    8'h40 + i[7:0],
-                    8'h50 + i[7:0],
-                    8'h60 + i[7:0],
-                    8'h70 + i[7:0],
-                    8'h80 + i[7:0],
-                    8'h90 + i[7:0],
-                    8'hA0 + i[7:0],
-                    8'hB0 + i[7:0],
-                    8'hC0 + i[7:0],
-                    8'hD0 + i[7:0],
-                    8'hE0 + i[7:0],
-                    8'hF0 + i[7:0]
-                };
-
-                s_axi_wstrb <= 16'hFFFF;
-
-                if (i == num_beats-1)
-                    s_axi_wlast <= 1'b1;
-                else
-                    s_axi_wlast <= 1'b0;
-
-                s_axi_wvalid <= 1'b1;
-
-
-                //Wait for W handshake
-                while (!s_axi_wready)
+                //Wait arvalid
+                while (!m_axi_arvalid) begin
                     @(posedge clk);
+                end
 
 
+                beats_in_burst = m_axi_arlen + 1;
+                start_word = m_axi_araddr / bytes_per_word;
+
+                $display("[%0t] AXI read request: addr=0x%0h, beats=%0d, start_word=%0d", 
+                         $time, m_axi_araddr, beats_in_burst, start_word);
+
+                //Set arredy
                 @(posedge clk);
+                m_axi_arready <= 1'b1;
+                @(posedge clk);
+                m_axi_arready <= 1'b0;
 
-                s_axi_wvalid <= 1'b0;
-                s_axi_wlast  <= 1'b0;
+                //Transmit data
+                for (beat_cnt = 0; beat_cnt < beats_in_burst; beat_cnt = beat_cnt + 1) begin
+                    //In field memory
+                    if (start_word + beat_cnt >= memory_size) begin
+                        $display("ERROR: Read outside memory size");
+                        $finish;
+                    end
 
+                    //wait rready
+                    while (!m_axi_rready) begin
+                        @(posedge clk);
+                    end
+
+                    //Transmit data
+                    @(posedge clk);
+                    m_axi_rvalid <= 1'b1;
+                    m_axi_rdata  <= memory[start_word + beat_cnt];
+
+                    //rlast = 1 last beat in last burst
+                    if (beat_cnt == beats_in_burst - 1) begin
+                        m_axi_rlast <= 1'b1;
+                    end else begin
+                        m_axi_rlast <= 1'b0;
+                    end
+
+                end
+                //Wait, while master transmit data
+                @(posedge clk);
+                m_axi_rvalid <= 1'b0;
+                m_axi_rlast  <= 1'b0;
+
+                $display("[%0t] AXI read completed: %0d words", $time, beats_in_burst);
+
+                if (done) begin
+                    $display("done");
+
+                end
+            end
+        end
+    endtask
+
+    //Memory
+    localparam MEMORY_WORDS = 640 * 480 * 2;  // 2 frames into 1920x1080 pixel
+    reg [M_AXI_DATA_WIDTH-1:0] memory [0:MEMORY_WORDS-1];
+
+    //Fill memory
+    task fill_memory;
+        integer i;
+        integer frame_offset;
+        integer pixel_value;
+
+        begin
+            //Frame 1 (base_offset = 0)
+            frame_offset = 0;
+            for (i = 0; i < 640 * 480 / 16; i = i + 1) begin
+                memory[frame_offset + i] = {
+                    8'hF0 + (i % 16), 8'hE0 + (i % 16), 8'hD0 + (i % 16), 8'hC0 + (i % 16),
+                    8'hB0 + (i % 16), 8'hA0 + (i % 16), 8'h90 + (i % 16), 8'h80 + (i % 16),
+                    8'h70 + (i % 16), 8'h60 + (i % 16), 8'h50 + (i % 16), 8'h40 + (i % 16),
+                    8'h30 + (i % 16), 8'h20 + (i % 16), 8'h10 + (i % 16), 8'h00 + (i % 16)
+                };
             end
 
-            //Response
-            s_axi_bready <= 1'b1;
+            //Frame 2 (base_offset = 64)
+            frame_offset = 640 * 480 / 16;
+            for (i = 0; i < 640 * 480 / 16; i = i + 1) begin
+                memory[frame_offset + i] = {
+                    8'hF0 + ((i + 64) % 256), 8'hE0 + ((i + 64) % 256), 8'hD0 + ((i + 64) % 256), 8'hC0 + ((i + 64) % 256),
+                    8'hB0 + ((i + 64) % 256), 8'hA0 + ((i + 64) % 256), 8'h90 + ((i + 64) % 256), 8'h80 + ((i + 64) % 256),
+                    8'h70 + ((i + 64) % 256), 8'h60 + ((i + 64) % 256), 8'h50 + ((i + 64) % 256), 8'h40 + ((i + 64) % 256),
+                    8'h30 + ((i + 64) % 256), 8'h20 + ((i + 64) % 256), 8'h10 + ((i + 64) % 256), 8'h00 + ((i + 64) % 256)
+                };
+            end
 
-            while (!s_axi_bvalid)
-                @(posedge clk);
-
-            @(posedge clk);
-
-            s_axi_bready <= 1'b0;
-
+            $display("Memory filled: %0d words", MEMORY_WORDS);
         end
-
     endtask
 
     task axi_stream_write_line;
@@ -292,17 +348,21 @@ module tb_top_frame_subtraction();
         clk = 1'b0;
         resetn = 1'b0;
 
-        //AXI4_FULL slave
-        s_axi_awaddr  = 0;
-        s_axi_awprot  = 0;
-        s_axi_awvalid = 0;
-        //
-        s_axi_wdata  = 0;
-        s_axi_wstrb  = 0;
-        s_axi_wvalid = 0;
-        s_axi_wlast  = 0;
-        //
-        s_axi_bready = 0;
+        width_frame  = 640;
+        height_frame = 480;
+
+        fill_memory();
+
+        //AXI4-Full Master (MM2S)
+        m_axi_arready  = 0;
+        m_axi_rdata    = 0;
+        m_axi_rlast    = 0;
+        m_axi_rvalid   = 0;
+        m_axi_rresp    = 0;
+
+        start_addr     = 0;
+        bytes_to_read  = 0;
+        start          = 0;
 
         //AXI_STREAM slave
         s_axis_tdata  = 0;
@@ -326,16 +386,18 @@ module tb_top_frame_subtraction();
             $display("TEST: AXI4_FULL");
             $display("========================================");
 
-            axi_write_burst(32'h0000_1000, 120);
-            axi_write_burst(32'h0000_1000, 120);
-            axi_write_burst(32'h0000_1000, 120);
-            axi_write_burst(32'h0000_1000, 120);
-            axi_write_burst(32'h0000_1000, 120);
-            axi_write_burst(32'h0000_1000, 120);
-            axi_write_burst(32'h0000_1000, 120);
-            axi_write_burst(32'h0000_1000, 120);
+            start_addr    <= 32'h0000_0000;
+            bytes_to_read <= 640 * 480;
+            start         <= 1'b1;
+
+            axi_master_read_responder(MEMORY_WORDS, 0);  // 120 beats = строка
+
+            //wait (done);
+            $display("AXI Master finished.");
+        
+
         end else if (INTERFACE_TYPE == "AXI_STREAM") begin
-            for (i = 0; i < HEIGHT_FRAME*2; i = i + 1) begin
+            for (i = 0; i < height_frame*2; i = i + 1) begin
                 axi_stream_write_line(2, 120, i);
                 axi_stream_write_line(2, 120, i+5);
             end
@@ -344,7 +406,6 @@ module tb_top_frame_subtraction();
             $display("TEST: AXI_STREAM");
             $display("========================================");
         end
-
 
         //Wait
         repeat (10)
@@ -357,7 +418,5 @@ module tb_top_frame_subtraction();
         $finish;
 
 	end
-
-
 endmodule
 `default_nettype wire
