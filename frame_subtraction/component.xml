@@ -381,6 +381,20 @@
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
+      <spirit:view>
+        <spirit:name>xilinx_productguide</spirit:name>
+        <spirit:displayName>Product Guide</spirit:displayName>
+        <spirit:envIdentifier>:vivado.xilinx.com:docs.productguide</spirit:envIdentifier>
+        <spirit:fileSetRef>
+          <spirit:localName>xilinx_productguide_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:parameters>
+          <spirit:parameter>
+            <spirit:name>viewChecksum</spirit:name>
+            <spirit:value>6c07b1bf</spirit:value>
+          </spirit:parameter>
+        </spirit:parameters>
+      </spirit:view>
     </spirit:views>
     <spirit:ports>
       <spirit:port>
@@ -945,7 +959,7 @@
   </spirit:model>
   <spirit:choices>
     <spirit:choice>
-      <spirit:name>choice_list_9ae0c08b</spirit:name>
+      <spirit:name>choice_list_75e45d2a</spirit:name>
       <spirit:enumeration>16</spirit:enumeration>
       <spirit:enumeration>32</spirit:enumeration>
       <spirit:enumeration>64</spirit:enumeration>
@@ -1067,6 +1081,13 @@
         <spirit:userFileType>GTCL</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
+    <spirit:fileSet>
+      <spirit:name>xilinx_productguide_view_fileset</spirit:name>
+      <spirit:file>
+        <spirit:name>docs/frame_subtraction.pdf</spirit:name>
+        <spirit:userFileType>pdf</spirit:userFileType>
+      </spirit:file>
+    </spirit:fileSet>
   </spirit:fileSets>
   <spirit:description>Highly parameterizable Frame Subtraction IP-core for video processing with selectable AXI4-Full or AXI4-Stream interfaces</spirit:description>
   <spirit:parameters>
@@ -1099,7 +1120,7 @@
     <spirit:parameter>
       <spirit:name>M_AXI_DATA_WIDTH</spirit:name>
       <spirit:displayName>M Axi Data Width</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.M_AXI_DATA_WIDTH" spirit:choiceRef="choice_list_9ae0c08b">128</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.M_AXI_DATA_WIDTH" spirit:choiceRef="choice_list_75e45d2a">128</spirit:value>
     </spirit:parameter>
   </spirit:parameters>
   <spirit:vendorExtensions>
@@ -1135,20 +1156,20 @@
       </xilinx:taxonomies>
       <xilinx:displayName>frame_subtraction</xilinx:displayName>
       <xilinx:definitionSource>package_project</xilinx:definitionSource>
-      <xilinx:coreRevision>34</xilinx:coreRevision>
+      <xilinx:coreRevision>36</xilinx:coreRevision>
       <xilinx:upgrades>
         <xilinx:canUpgradeFrom>xilinx.com:mdumanski:top_frame_subtraction:1.0</xilinx:canUpgradeFrom>
       </xilinx:upgrades>
-      <xilinx:coreCreationDateTime>2026-09-11T22:22:52Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2026-09-13T22:30:50Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2024.1</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="2d9bc258"/>
       <xilinx:checksum xilinx:scope="addressSpaces" xilinx:value="21e8a694"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="45e3ac54"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="06787990"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="820e5545"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="45a06d03"/>
-      <xilinx:checksum xilinx:scope="parameters" xilinx:value="e19811f8"/>
+      <xilinx:checksum xilinx:scope="parameters" xilinx:value="b515b099"/>
     </xilinx:packagingInfo>
   </spirit:vendorExtensions>
 </spirit:component>
